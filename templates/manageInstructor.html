@@ -1,98 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin | manage Instructors</title>
-    <link rel="stylesheet" href="/static/admin.css">
+    <link rel="stylesheet" href="/static/admin.css" />
     <script src="/static/manageInstructor.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <style>
-        .newInstructor{
-            display: none;
-        }
-        .newInstructor{
-            padding-top: 30vh;
-        }
-        .textwrap>input{
-            width: 300px !important;
-            height: 50px !important;
-        }
-        .textwrap>select{
-            margin-left: 10px;
-            padding-left: 10px;
-            width: 200px;
-        }
+      .newInstructor {
+        display: none;
+      }
+      .newInstructor {
+        padding-top: 30vh;
+      }
+      .textwrap > input {
+        width: 300px !important;
+        height: 50px !important;
+      }
+      .textwrap > select {
+        margin-left: 10px;
+        padding-left: 10px;
+        width: 200px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <section>
-        <!-- Left nevigatoin section to jump onto different sections -->
-        <nav>
-            <div class="avatarWrap">
-                <div class="avatar"></div>
-                <h2>Baccha yadav</h2>
-                <h3>(Administrator)</h3>
-            </div>
-            <ul class="navigation">
-                <li>Manage Students</li>
-                <li class="active">Manage Instructors</li>
-                <li>Manage Courses</li>
-                <li>Registration Window</li>
-                <li>Feedbacks</li>
-                <li>Settings</li>
-            </ul>
-        </nav>
-
-        <div id="manageStudents">
-            <div class="enrollNewStudents" onclick="document.getElementsByClassName('newInstructor')[0].style.display = 'block'">
-                Add New Staff
-            </div>
+      <!-- Left nevigatoin section to jump onto different sections -->
+      <nav>
+        <div class="avatarWrap">
+          <div class="avatar"></div>
+          <h2>Baccha yadav</h2>
+          <h3>(Administrator)</h3>
         </div>
+        <ul class="navigation">
+          <li>Manage Students</li>
+          <li class="active">Manage Instructors</li>
+          <li>Manage Courses</li>
+          <li>Registration Window</li>
+          <li>Feedbacks</li>
+          <li>Settings</li>
+        </ul>
+      </nav>
 
-        <div class="newInstructor modal">
-            <!-- Button to close the enrollment modal -->
-            <div class="close" onclick="closeResistration()"></div>
-
-            <form class="detailContainer" method="post" onsubmit="return confirm('Do you really want to submit the form?');">
-                {% csrf_token %}
-                <div class="textwrap">
-                    <p>Employment ID</p>
-                    <input type="text"name="instructor" id="instructor">
-                </div>
-                <div class="textwrap">
-                    <p>First Name</p>
-                    <input type="text"name="fname" id="fname">
-                </div>
-                <div class="textwrap">
-                    <p>Last Name</p>
-                    <input type="text"name="lname" id="lname">
-                </div>
-                <div class="textwrap">
-                    <p>Department: </p>
-                    <select name="department" id="department">
-                        <option value="none">Select Option</option>
-
-                    </select>
-                </div>
-                <div style="display: block;">
-                    <button type="submit" id="sbtbtn">Submit</button>
-                </div>
-            </form>
-            
-            <div class="mystaff">
-                <div class="stack"></div>
-            </div>
-
+      <div id="manageStudents">
+        <div
+          class="enrollNewStudents"
+          onclick="document.getElementsByClassName('newInstructor')[0].style.display = 'block'"
+        >
+          Add New Staff
         </div>
+      </div>
 
-        <!-- glass morphology elements -->
+      <div class="newInstructor modal">
+        <!-- Button to close the enrollment modal -->
+        <div class="close" onclick="closeResistration()"></div>
 
-        <div class="circle1 circle"></div>
-        <div class="circle2 circle"></div>
+        <form
+          class="detailContainer"
+          method="post"
+          onsubmit="return confirm('Do you really want to submit the form?');"
+        >
+          {% csrf_token %}
+          <div class="textwrap">
+            <p>Employment ID</p>
+            <input type="text" name="instructor" id="instructor" />
+          </div>
+          <div class="textwrap">
+            <p>First Name</p>
+            <input type="text" name="fname" id="fname" />
+          </div>
+          <div class="textwrap">
+            <p>Last Name</p>
+            <input type="text" name="lname" id="lname" />
+          </div>
+          <div class="textwrap">
+            <p>Department:</p>
+            <select name="department" id="department">
+              <option value="none">Select Option</option>
+            </select>
+          </div>
+          <div style="display: block">
+            <button type="submit" id="sbtbtn">Submit</button>
+          </div>
+        </form>
+
+        <div class="mystaff">
+          <div class="stack"></div>
+        </div>
+      </div>
+
+      <!-- glass morphology elements -->
+
+      <div class="circle1 circle"></div>
+      <div class="circle2 circle"></div>
     </section>
-</body>
+  </body>
 </html>
