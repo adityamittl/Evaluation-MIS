@@ -17,7 +17,10 @@ presets = {
     "p": "PHD",
 }
 
-
+degreeYears = {
+    'UG' : 8,
+    'PG' : 4,
+}
 # section of code for the administrator section
 
 
@@ -137,8 +140,24 @@ def editCourse(request,cid):
 # for the registration access, that is allow admin to start registrations.
 
 def registrationSetup(request):
-    sessionYear.objects.create()
-    subjects = Subject.objects.all()
-    for course in subjects:
-        sessionSubject.objects.create(subject = course, sessionName = )
+    if request.method == 'POST':
+        registrationStart = request.POST.get('startDateTime')
+        semType = request.POST.get('semType')
+        session = request.POST.get('session')
+        degType = request.POST.get('deg')
+        sYear = sessionYear.objects.create(year = int(session))
+
+        subjects = Subject.objects.all()
+        for course in subjects:
+            sessionSubject.objects.create(subject = course, registrationStart = registrationStart, liveRegistration = True, remainingSeats = course.totalSeats, type = semType, sessionName = sYear)
+
+        students = studentProfile.objects.filter(currentStudent = True, degreeType = degType)
+
+        for student in students:
+            sems = degreeYears[degType]
+            if student.currentSem < sems:
+                student.currentSem += 1
+
+
     return render(request, 'registration.html')
+

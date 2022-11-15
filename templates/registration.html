@@ -52,11 +52,19 @@
             <form action="" method="post" class="registrationForm">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1">Registration Start Date and Time</span>
-                    <input type="datetime-local" class="form-control" aria-describedby="basic-addon1" name="startDateTime">
+                    <input type="datetime-local" class="form-control" aria-describedby="basic-addon1" name="startDateTime" id="startDateTime">
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1">Registration For session</span>
                     <input type="number" name="session" value="2016" class="form-control" aria-describedby="basic-addon1" id="RegistrationYear">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Semester Type</span>
+                    <input type="text" name="semType" value="Even" class="form-control" aria-describedby="basic-addon1" id="semType">
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">For Degree</span>
+                    <input type="number" name="deg" value="UG" class="form-control" aria-describedby="basic-addon1" id="deg">
                 </div>
 
             </form>
@@ -70,6 +78,7 @@
         <script>
             let x = new Date
             document.getElementById('RegistrationYear').value= x.getFullYear();
+            document.getElementById('startDateTime').setAttribute('min', x.toJSON().split('.')[0])
         </script>
     </section>
 </body>

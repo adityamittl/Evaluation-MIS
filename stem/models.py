@@ -74,6 +74,7 @@ class studentSessionsheet(models.Model):
 class gradeSheet(models.Model):
     session = models.ForeignKey(sessionYear, on_delete = models.CASCADE)
     subjects = models.ManyToManyField(studentSessionsheet)
+    isPassed = models.BooleanField(default=False)
 
 # Building student profile, initially with name and email and then ask them to complete their profile
 class studentProfile(models.Model):
