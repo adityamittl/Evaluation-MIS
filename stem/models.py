@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 #Branches in that perticular institute
 class branches(models.Model):
@@ -40,17 +41,21 @@ class sessionYear(models.Model):
 class Subject(models.Model):
     subjectId = models.CharField(max_length = 50)
     subjectName = models.CharField(max_length = 100)
-    evaluation = models.ManyToManyField(evaluationScheme)
     credits = models.IntegerField()
-    teachers = models.ForeignKey(teacherProfile, on_delete = models.CASCADE)
-    remainingSeats = models.IntegerField(default = 0)
+    teachers = models.ForeignKey(teacherProfile, on_delete = models.CASCADE, null=True, blank=True)
     subjectType = models.CharField(max_length = 20)
     offeredSem = models.CharField(max_length = 20)
+    totalSeats = models.IntegerField(default = 0)
 
 # year in the session.
 class sessionSubject(models.Model):
+    remainingSeats = models.IntegerField(default = 0)
     subject = models.ForeignKey(Subject, on_delete = models.CASCADE)
+    evaluation = models.ManyToManyField(evaluationScheme, null=True)
     sessionName = models.ForeignKey(sessionYear, on_delete = models.CASCADE)
+    registrationStart = models.DateTimeField(default = now, blank=True)
+    liveRegistration = models.BooleanField(default=False)
+    type = models.CharField(max_length=20, null=True, blank=True)
     
 # This table is to give score to each evalution module created by the instructor.
 class scoreCard(models.Model):
@@ -86,7 +91,7 @@ class studentProfile(models.Model):
     parentContact = models.CharField(max_length = 50, null = True, blank = True)
     photo = models.ImageField(null = True, blank = True)
     scoreSheet = models.ManyToManyField(gradeSheet, null = True, blank = True)
-    currentSem = models.CharField(max_length = 20, default = '1')
+    currentSem = models.CharField(max_length = 20, default = '0')
     admissionYear = models.CharField(max_length = 20)
     currentStudent = models.BooleanField(default = True)
     backlogs = models.IntegerField(default = 0)
