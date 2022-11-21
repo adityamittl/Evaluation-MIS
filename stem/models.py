@@ -2,6 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 
+
+class currentRegistrations(models.Model):
+    registrationStart = models.DateTimeField(default = now, blank=True)
+    liveRegistration = models.BooleanField(default=False)
+
+
 #Branches in that perticular institute
 class branches(models.Model):
     branchName = models.CharField(max_length = 50)
@@ -53,8 +59,6 @@ class sessionSubject(models.Model):
     subject = models.ForeignKey(Subject, on_delete = models.CASCADE)
     evaluation = models.ManyToManyField(evaluationScheme, null=True)
     sessionName = models.ForeignKey(sessionYear, on_delete = models.CASCADE)
-    registrationStart = models.DateTimeField(default = now, blank=True)
-    liveRegistration = models.BooleanField(default=False)
     type = models.CharField(max_length=20, null=True, blank=True)
     
 # This table is to give score to each evalution module created by the instructor.
@@ -72,12 +76,13 @@ class studentSessionsheet(models.Model):
 
 # Score sheet, taking additional to 
 class gradeSheet(models.Model):
-    session = models.ForeignKey(sessionYear, on_delete = models.CASCADE)
     subjects = models.ManyToManyField(studentSessionsheet)
     isPassed = models.BooleanField(default=False)
+    current = models.BooleanField(default=True)
 
 # Building student profile, initially with name and email and then ask them to complete their profile
 class studentProfile(models.Model):
+    user = models.OneToOneField(User, on_delete = models.CASCADE)
     firstName = models.CharField(max_length = 100)
     lastName = models.CharField(max_length = 100)
     fatherName = models.CharField(max_length = 50,null = True, blank = True)
@@ -96,6 +101,7 @@ class studentProfile(models.Model):
     admissionYear = models.CharField(max_length = 20)
     currentStudent = models.BooleanField(default = True)
     backlogs = models.IntegerField(default = 0)
+    currentSemRegister = models.BooleanField(default=False)
 
     def __str__(self):
         return self.rollNumber

@@ -18,10 +18,12 @@
         ul {
             padding-left: 0;
         }
-        .registrationForm{
+
+        .registrationForm {
             width: 50%;
         }
-        #manageStudents{
+
+        #manageStudents {
             display: grid;
             place-items: center;
         }
@@ -49,25 +51,31 @@
         </nav>
 
         <div id="manageStudents">
-            <form action="" method="post" class="registrationForm">
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">Registration Start Date and Time</span>
-                    <input type="datetime-local" class="form-control" aria-describedby="basic-addon1" name="startDateTime" id="startDateTime">
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">Registration For session</span>
-                    <input type="number" name="session" value="2016" class="form-control" aria-describedby="basic-addon1" id="RegistrationYear">
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">Semester Type</span>
-                    <input type="text" name="semType" value="Even" class="form-control" aria-describedby="basic-addon1" id="semType">
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">For Degree</span>
-                    <input type="number" name="deg" value="UG" class="form-control" aria-describedby="basic-addon1" id="deg">
-                </div>
+            <form action="" method="post" class="registrationForm" onsubmit="return confirm('Do you really want to submit the form?')">
+                {%csrf_token%}
+                <div class=" input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Registration Start Date and Time</span>
+                <input type="datetime-local" class="form-control" aria-describedby="basic-addon1" name="startDateTime"
+                    id="startDateTime">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Registration For session</span>
+            <input type="number" name="session" value="2016" class="form-control" aria-describedby="basic-addon1"
+                id="RegistrationYear">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Semester Type</span>
+            <input type="text" name="semType" value="Even" class="form-control" aria-describedby="basic-addon1"
+                id="semType">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">For Degree</span>
+            <input type="text" name="deg" value="UG" class="form-control" aria-describedby="basic-addon1" id="deg">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
 
-            </form>
+        <button type="button" class="btn btn-danger" onclick="stopRegistration()">Stop Registrations</button>
         </div>
 
 
@@ -77,8 +85,22 @@
         <div class="circle2 circle"></div>
         <script>
             let x = new Date
-            document.getElementById('RegistrationYear').value= x.getFullYear();
-            document.getElementById('startDateTime').setAttribute('min', x.toJSON().split('.')[0])
+            document.getElementById('RegistrationYear').value = x.getFullYear();
+            document.getElementById('startDateTime').setAttribute('min', x.toJSON().split('.')[0].slice(0,16));
+            function stopRegistration() {
+                if (confirm('Do you really want to stop registration Process')) {
+                    let xhr = new XMLHttpRequest()
+                    xhr.open('POST', 'stopRegistration');
+                    xhr.setRequestHeader('X-CSRFToken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
+                    xhr.send();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.status != 200) {
+                            alert("Encountered an error")
+                        }
+                        // alert('Registration Process has been stopped!! ')
+                    }
+                }
+            }
         </script>
     </section>
 </body>

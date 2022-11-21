@@ -6,8 +6,11 @@ import string
 import random
 S = 10  
 
+specialChars = ['!','@','#','$','%','&','*',]
+
 def givePassword():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
+    words = ''.join(random.choices(string.ascii_uppercase, k = 3)) + ''.join(random.choices(string.ascii_lowercase, k = 3)) + ''.join(random.choices(specialChars, k = 2)) + ''.join(random.choices(string.digits, k = 2))
+    return words
 
 def setpasswords(filepath):
     workbook = load_workbook(filename=filepath)
@@ -34,4 +37,5 @@ def extractData(file):
 
 
 if '__main__' == __name__:
-    print(extractData('rnos.xlsx'))
+    print(givePassword())
+    # print(extractData('rnos.xlsx'))

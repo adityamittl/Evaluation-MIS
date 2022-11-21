@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
-# from django.core import serializers
+from student.views import studentHome
 
 
 import json
@@ -23,7 +23,6 @@ degreeYears = {
 }
 # section of code for the administrator section
 
-
 def breakRollNo(rollno):
 
     year = "20" + rollno[:2]
@@ -32,10 +31,11 @@ def breakRollNo(rollno):
     return year, presets[degreetype], branch
 
 
-def buildStudentProfile(data, rollnumber):
+def buildStudentProfile(data, rollnumber,newUser):
 
     year, dtype, branch = breakRollNo(rollnumber)
     studentProfile.objects.create(
+        user = newUser,
         firstName=data["First Name"],
         lastName=data["Last name"],
         fatherName=data["Father Name"],
@@ -47,19 +47,18 @@ def buildStudentProfile(data, rollnumber):
     ).save()
 
 
-def administrator(request):
-
+def administratorHome(request):
+    
     if request.method == "POST":
         studentData = request.FILES["studentDetails"]
         fs = FileSystemStorage(location="media/enrollmentSheet")
         filename = fs.save(studentData.name, studentData)
-        fetchedData = extractData("./media/" + filename)
+        fetchedData = extractData("./media/enrollmentSheet/" + filename)
         for rollnumber in fetchedData.keys():
-            newUser = User.objects.create_user(rollnumber)
-            newUser.password = fetchedData[rollnumber]["password"]
+            newUser = User.objects.create_user(rollnumber,'',fetchedData[rollnumber]["password"])
             newUser.save()
             loginMode.objects.create(user=newUser, type="student").save()
-            buildStudentProfile(fetchedData[rollnumber], rollnumber)
+            buildStudentProfile(fetchedData[rollnumber], rollnumber,newUser)
 
         print("successful")
 
@@ -145,19 +144,41 @@ def registrationSetup(request):
         semType = request.POST.get('semType')
         session = request.POST.get('session')
         degType = request.POST.get('deg')
-        sYear = sessionYear.objects.create(year = int(session))
+        currentRegistrations.objects.create(registrationStart = registrationStart).save()
+        if sessionYear.objects.get(year = int(session)) != None:
+            sYear = sessionYear.objects.create(year = int(session))
 
         subjects = Subject.objects.all()
         for course in subjects:
-            sessionSubject.objects.create(subject = course, registrationStart = registrationStart, liveRegistration = True, remainingSeats = course.totalSeats, type = semType, sessionName = sYear)
+            sessionSubject.objects.create(subject = course, remainingSeats = course.totalSeats, type = semType, sessionName = sYear)
 
         students = studentProfile.objects.filter(currentStudent = True, degreeType = degType)
 
         for student in students:
             sems = degreeYears[degType]
-            if student.currentSem < sems:
-                student.currentSem += 1
+            print(sems)
+            if student.currentSem < str(sems):
+                student.currentSem = str(int(student.currentSem) + 1)
+                student.currentSemRegister = True
+                student.save()
 
 
     return render(request, 'registration.html')
 
+
+def stopRegistrations(request):
+    if request.method == 'POST':
+        regs = currentRegistrations.objects.get(liveRegistration = True)
+        for i in regs:
+            regs.liveRegistration = False
+            regs.save()
+    
+    return JsonResponse({'status':'Success'})
+
+
+@login_required
+def dashboard(request):
+    if loginMode.objects.get(user = request.user).type == 'admin':
+        return administratorHome(request)
+    elif loginMode.objects.get(user = request.user).type == 'student':
+        return studentHome(request)
