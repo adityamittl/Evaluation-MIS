@@ -33,8 +33,6 @@
       }
 
       #manageCourses {
-        display: grid;
-        place-items: center;
         width: 100%;
         overflow-y: scroll;
       }
@@ -56,18 +54,148 @@
           </li>
           <li onclick="window.location.href='/showFeedback'">Show Feedback</li>
           <li onclick="window.location.href='/grading'">Grading</li>
-          <li>Logout</li>
+          <li onclick="window.location.href='/signout'">Logout</li>
         </ul>
       </nav>
 
       <div id="manageCourses">
-        <p>Manage Courses</p>
+        <div style="display: flex; flex-direction: column">
+          <nav class="navbar bg-light" style="height: 60px; width: 100%">
+            <div class="container-fluid">
+              <span class="navbar-brand mb-0 h1">Your Courses</span>
+            </div>
+          </nav>
+          <div class="row" style="padding: 10px; width: 60%">
+            <div class="col-sm-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Course 1</h5>
+                  <p class="card-text">
+                    With supporting text below as a natural lead-in to
+                    additional content.
+                  </p>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasBottom"
+                    aria-controls="offcanvasBottom"
+                  >
+                    Edit Evaluation Scheme
+                  </button>
+
+                  <div
+                    class="offcanvas offcanvas-bottom"
+                    tabindex="-1"
+                    id="offcanvasBottom"
+                    aria-labelledby="offcanvasBottomLabel"
+                    style="height: 70vh"
+                  >
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasBottomLabel">
+                        Evaluation Scheme
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="offcanvas-body small">to do: table form</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Course 2</h5>
+                  <p class="card-text">
+                    With supporting text below as a natural lead-in to
+                    additional content.
+                  </p>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasBottom"
+                    aria-controls="offcanvasBottom"
+                  >
+                    Edit Evaluation Scheme
+                  </button>
+
+                  <div
+                    class="offcanvas offcanvas-bottom"
+                    tabindex="-1"
+                    id="offcanvasBottom"
+                    aria-labelledby="offcanvasBottomLabel"
+                    style="height: 70vh"
+                  >
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasBottomLabel">
+                        Evaluation Scheme
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="offcanvas-body small">Maa chuda</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Course 3</h5>
+                  <p class="card-text">
+                    With supporting text below as a natural lead-in to
+                    additional content.
+                  </p>
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasBottom"
+                    aria-controls="offcanvasBottom"
+                  >
+                    Edit Evaluation Scheme
+                  </button>
+
+                  <div
+                    class="offcanvas offcanvas-bottom"
+                    tabindex="-1"
+                    id="offcanvasBottom"
+                    aria-labelledby="offcanvasBottomLabel"
+                    style="height: 70vh"
+                  >
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasBottomLabel">
+                        Evaluation Scheme
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="offcanvas-body small">Maa chuda</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <!-- glass morphology elements -->
-
-      <div class="circle1 circle"></div>
-      <div class="circle2 circle"></div>
     </section>
+    <!-- glass morphology elements -->
+
+    <div class="circle1 circle"></div>
+    <div class="circle2 circle"></div>
   </body>
 </html>
