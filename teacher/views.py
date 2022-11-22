@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from stem.models import *
 from django.core.files.storage import FileSystemStorage
 
 
-def teacher_func(request):
+def edit_profile(request):
     if request.method == 'POST':
         photo = request.FILES['photo']
         fs = FileSystemStorage(location="media/profilePhoto/")
@@ -15,6 +15,20 @@ def teacher_func(request):
         teacher.MobileNumber = request.POST.get('mobileNo')
         teacher.email = request.POST.get('secondaryEmail')
         teacher.photo = filename
+        teacher.save()
+        return redirect('editProfile')
 
-    return render(request, 'teacher.html')
+    return render(request, 'teacherHome.html')
     # return render(request, 'teacher.html', context={'detail': teacherProfile.objects.get(user=request.user)})
+
+
+def manage_courses(request):
+    return render(request, 'manageCourses.html')
+
+
+def show_feedback(request):
+    return render(request, 'teacherFeedback.html')
+
+
+def set_grading(request):
+    return render(request, 'teacherGrading.html')
