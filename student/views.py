@@ -100,7 +100,7 @@ def currentSheet(request):
 @login_required
 def studentFeedback(request):
     if loginMode.objects.get(user = request.user).type == 'student':
-        studentProfile.objects.
+        studentProfile.objects.get(user = request.user)
         if request.method == 'POST':
             star = list(request.POST)[2].split("_")[1]
             feedback.objects.create(point = star, teacher = teacherProfile.objects.get(employeeId = request.POST.get('teacher_name'), description = request.POST.get('feedback'))).save()

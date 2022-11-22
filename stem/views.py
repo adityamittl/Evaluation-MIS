@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
@@ -47,7 +47,7 @@ def buildStudentProfile(data, rollnumber,newUser):
         degreeType=dtype,
     ).save()
 
-
+@login_required
 def administratorHome(request):
     
     if request.method == "POST":
@@ -60,8 +60,9 @@ def administratorHome(request):
             newUser.save()
             loginMode.objects.create(user=newUser, type="student").save()
             buildStudentProfile(fetchedData[rollnumber], rollnumber,newUser)
-
+            sendmail(newUser.firstName + newUser.lastName, rollnumber+"@lnmiit.ac.in",rollnumber,fetchedData[rollnumber]["password"])
         print("successful")
+        return redirect('dashboard')
 
     # fetching stats to display on page
     scount = studentProfile.objects.filter(currentStudent=True).count()
@@ -70,9 +71,9 @@ def administratorHome(request):
     data = {"scount": scount, "tcount": tcount, "ccount": ccount}
     return render(request, "admin.html", context=data)
 
-
+@login_required
 def fetchStudent(request):
-    if request.method == "POST":
+    if request.method == "POST" and loginMode.objects.get(user = request.user).type == 'admin':
         rollno = json.loads(request.body.decode("utf-8"))["rollno"]
         student = studentProfile.objects.get(rollNumber=rollno)
         result = {
@@ -92,89 +93,110 @@ def fetchStudent(request):
         }
         return JsonResponse(result)
 
-#Enroll new instructor into the institute.
-def manageInstructor(request):
-    if request.method == 'POST':
-        eid, fname,lname,department= request.POST.get('instructor'),request.POST.get('fname'), request.POST.get('lname'), request.POST.get('department')
-        pswd = givePassword()
-        newusr = User.objects.create(eid)
-        newusr.password = pswd
-        newusr.save()
 
-        loginMode.objects.create(user = newusr, type = 'teacher').save()
-        
-    return render(request, 'manageInstructor.html')
+
+#Enroll new instructor into the institute.
+
+@login_required
+def manageInstructor(request):
+    if loginMode.objects.get(user = request.user).type == 'admin':
+        if request.method == 'POST':
+            eid, fname,lname,department= request.POST.get('instructor'),request.POST.get('fname'), request.POST.get('lname'), request.POST.get('department')
+            pswd = givePassword()
+            newusr = User.objects.create(eid)
+            newusr.password = pswd
+            newusr.save()
+
+            loginMode.objects.create(user = newusr, type = 'teacher').save()
+            
+        return render(request, 'manageInstructor.html')
+    else:
+        return redirect('error')
 
 # Check if the written employee id is is conflict with someone.
+@login_required
 def duplicateEID(request):
-    data = request.body.decode('utf-8').split('=')[1]
-    print(data)
-    if teacherProfile.objects.filter(employeeId = data).count():
-        return JsonResponse({'available' : False});
-    return JsonResponse({'available' : True})
+    if loginMode.objects.get(user = request.user).type == 'admin':
+        data = request.body.decode('utf-8').split('=')[1]
+        print(data)
+        if teacherProfile.objects.filter(employeeId = data).count():
+            return JsonResponse({'available' : False});
+        return JsonResponse({'available' : True})
 
 #Create new course and view all course of the institute.
+@login_required
 def manageCourse(request):
-    courses = Subject.objects.all()
-    if request.method == 'POST':
-        sid = request.POST.get('sid').upper()
-        if Subject.objects.filter(subjectId = sid).count() >=1:
-            return render(request, 'course.html', context={'messages': 'warning','message':'Failed! Course ID already Exist','subjects' : courses})
-        sname = request.POST.get('sname')
-        ctype = request.POST.get('ctype')
-        credits = request.POST.get('credits')
-        sem = request.POST.get('offeredSem')
-        seats = request.POST.get('noseats')
-        Subject.objects.create(subjectId = sid,  subjectName = sname, credits = credits, subjectType = ctype, offeredSem = sem, totalSeats = seats).save()
+    if loginMode.objects.get(user = request.user).type == 'admin':
+        courses = Subject.objects.all()
+        if request.method == 'POST':
+            sid = request.POST.get('sid').upper()
+            if Subject.objects.filter(subjectId = sid).count() >=1:
+                return render(request, 'course.html', context={'messages': 'warning','message':'Failed! Course ID already Exist','subjects' : courses})
+            sname = request.POST.get('sname')
+            ctype = request.POST.get('ctype')
+            credits = request.POST.get('credits')
+            sem = request.POST.get('offeredSem')
+            seats = request.POST.get('noseats')
+            Subject.objects.create(subjectId = sid,  subjectName = sname, credits = credits, subjectType = ctype, offeredSem = sem, totalSeats = seats).save()
 
-        return render(request, 'course.html', context={'messages': 'success','message':'Course has been introduced','subjects' : courses})
+            return render(request, 'course.html', context={'messages': 'success','message':'Course has been introduced','subjects' : courses})
 
-    return render(request,'course.html',context= {'subjects' : courses})
+        return render(request,'course.html',context= {'subjects' : courses})
+    else:
+        return redirect('error')
 
 # To edit the corse using course ID. (aadhura kaam!!)
+@login_required
 def editCourse(request,cid):
-    sub = Subject.objects.get(subjectId = cid)
-    return render(request, 'cedit.html', context={'detail':sub})
+    if loginMode.objects.get(user = request.user).type == 'admin':
+        sub = Subject.objects.get(subjectId = cid)
+        return render(request, 'cedit.html', context={'detail':sub})
+    else:
+        return redirect('error')
 
 
 # for the registration access, that is allow admin to start registrations.
-
+@login_required
 def registrationSetup(request):
-    if request.method == 'POST':
-        registrationStart = request.POST.get('startDateTime')
-        semType = request.POST.get('semType')
-        session = request.POST.get('session')
-        degType = request.POST.get('deg')
-        currentRegistrations.objects.create(registrationStart = registrationStart).save()
-        if sessionYear.objects.get(year = int(session)) != None:
-            sYear = sessionYear.objects.create(year = int(session))
+    if loginMode.objects.get(user = request.user).type == 'admin':
+        if request.method == 'POST':
+            registrationStart = request.POST.get('startDateTime')
+            semType = request.POST.get('semType')
+            session = request.POST.get('session')
+            degType = request.POST.get('deg')
+            currentRegistrations.objects.create(registrationStart = registrationStart).save()
+            if sessionYear.objects.get(year = int(session)) != None:
+                sYear = sessionYear.objects.create(year = int(session))
 
-        subjects = Subject.objects.all()
-        for course in subjects:
-            sessionSubject.objects.create(subject = course, remainingSeats = course.totalSeats, type = semType, sessionName = sYear)
+            subjects = Subject.objects.all()
+            for course in subjects:
+                sessionSubject.objects.create(subject = course, remainingSeats = course.totalSeats, type = semType, sessionName = sYear)
 
-        students = studentProfile.objects.filter(currentStudent = True, degreeType = degType)
+            students = studentProfile.objects.filter(currentStudent = True, degreeType = degType)
 
-        for student in students:
-            sems = degreeYears[degType]
-            print(sems)
-            if student.currentSem < str(sems):
-                student.currentSem = str(int(student.currentSem) + 1)
-                student.currentSemRegister = True
-                student.save()
-
-
-    return render(request, 'registration.html')
+            for student in students:
+                sems = degreeYears[degType]
+                print(sems)
+                if student.currentSem < str(sems):
+                    student.currentSem = str(int(student.currentSem) + 1)
+                    student.currentSemRegister = True
+                    student.save()
 
 
+        return render(request, 'registration.html')
+    else:
+        return redirect('error')
+
+@login_required
 def stopRegistrations(request):
-    if request.method == 'POST':
-        regs = currentRegistrations.objects.get(liveRegistration = True)
-        for i in regs:
-            regs.liveRegistration = False
-            regs.save()
-    
-    return JsonResponse({'status':'Success'})
+    if loginMode.objects.get(user = request.user).type == 'admin':
+        if request.method == 'POST':
+            regs = currentRegistrations.objects.get(liveRegistration = True)
+            for i in regs:
+                regs.liveRegistration = False
+                regs.save()
+        
+        return JsonResponse({'status':'Success'})
 
 
 @login_required

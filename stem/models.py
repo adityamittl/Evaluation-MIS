@@ -42,6 +42,8 @@ class evaluationScheme(models.Model):
 
 class sessionYear(models.Model):
     year = models.IntegerField()
+    def __str__(self):
+        return str(self.year)
 
 # Creating a subject, only addministrator can create this.
 class Subject(models.Model):
@@ -72,12 +74,12 @@ class studentSessionsheet(models.Model):
     scoreSheet = models.ManyToManyField(scoreCard, null = True, blank = True)
     total = models.CharField(max_length = 20, null = True, blank = True)
     grade = models.CharField(max_length = 20, null = True, blank = True)
+    isPassed = models.BooleanField(default=False)
     # sessionYear = models.ForeignKey(sessionYear, on_delete = models.CASCADE)
 
 # Score sheet, taking additional to 
 class gradeSheet(models.Model):
     subjects = models.ManyToManyField(studentSessionsheet)
-    isPassed = models.BooleanField(default=False)
     current = models.BooleanField(default=True)
 
 # Building student profile, initially with name and email and then ask them to complete their profile

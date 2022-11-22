@@ -10,5 +10,5 @@ urlpatterns = [
     path('course/edit/<str:cid>',editCourse),
     path('registrationSetup',registrationSetup),
     path('stopRegistration',stopRegistrations),
-    path('',dashboard)
+    path('',dashboard,name='dashboard')
 ]
