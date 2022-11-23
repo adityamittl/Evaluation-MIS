@@ -409,7 +409,7 @@
                             <th scope="col"></th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="evaluationModules">
                           <tr>
                             <th scope="row">1</th>
                             <td>
@@ -436,61 +436,13 @@
                               </button>
                             </td>
                           </tr>
-                          <tr>
-                            <th scope="row">2</th>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger"
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">3</th>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger"
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
                         </tbody>
                       </table>
-                      <button type="button" class="btn btn-outline-primary">
+                      <button
+                        type="button"
+                        class="btn btn-outline-primary"
+                        onclick="addField()"
+                      >
                         + Add More
                       </button>
                       <table
@@ -518,5 +470,36 @@
 
     <div class="circle1 circle"></div>
     <div class="circle2 circle"></div>
+
+    <script>
+      let count = 2;
+      const addField = () => {
+        let rowWrap = document.createElement("tr");
+        let firstElement = document.createElement("th");
+        firstElement.setAttribute("scope", "row");
+        firstElement.innerHTML = count++;
+        rowWrap.appendChild(firstElement);
+        for (let i = 0; i < 3; i++) {
+          let secondWrap = document.createElement("td");
+          let innerDiv = document.createElement("div");
+          innerDiv.setAttribute("class", "col-auto");
+          let innerDivInput = document.createElement("input");
+          innerDivInput.setAttribute("type", "text");
+          innerDivInput.setAttribute("class", "form-control");
+          //innerDivInput.setAttribute();
+          innerDiv.appendChild(innerDivInput);
+          secondWrap.appendChild(innerDiv);
+          rowWrap.appendChild(secondWrap);
+        }
+        let delButtonWrap = document.createElement("td");
+        let button = document.createElement("button");
+        button.setAttribute("type", "button");
+        button.setAttribute("class", "btn btn-outline-danger");
+        button.innerHTML = "Delete";
+        delButtonWrap.appendChild(button);
+        rowWrap.appendChild(delButtonWrap);
+        document.getElementById("evaluationModules").appendChild(rowWrap);
+      };
+    </script>
   </body>
 </html>
