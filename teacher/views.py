@@ -42,7 +42,8 @@ def manage_courses(request, session):
                     course.append(sessionSubject.objects.get(
                         subject=subjs, sessionName=sess))
 
-        return render(request, 'manageCourses.html', context={'courses': course})
+        teacher = teacherProfile.objects.get(user=request.user)
+        return render(request, 'manageCourses.html', context={'courses': course, 'data': teacher})
 
     return redirect('error')
 
@@ -50,7 +51,9 @@ def manage_courses(request, session):
 @login_required
 def show_feedback(request):
     if loginMode.objects.get(user=request.user).type == 'teacher':
-        return render(request, 'teacherFeedback.html')
+        teacher = teacherProfile.objects.get(user=request.user)
+        feed_data = feedback.objects.filter(teacher=teacher)
+        return render(request, 'teacherFeedback.html', context={'data': teacher, 'feedbacks': feed_data})
 
     return redirect('error')
 
@@ -68,7 +71,8 @@ def set_grading(request, session):
                     course.append(sessionSubject.objects.get(
                         subject=subjs, sessionName=sess))
 
-        return render(request, 'teacherGrading.html', context={'courses': course})
+        teacher = teacherProfile.objects.get(user=request.user)
+        return render(request, 'teacherGrading.html', context={'courses': course, 'data': teacher})
 
     return redirect('error')
 
@@ -115,7 +119,8 @@ def manage_courses_wrap(request):
             return redirect('/manageCourses/'+sess)
 
         sessions = sessionYear.objects.all()
-        return render(request, 'selectSession.html', context={'session': sessions, 'm': True, 'g': False})
+        teacher = teacherProfile.objects.get(user=request.user)
+        return render(request, 'selectSession.html', context={'session': sessions, 'm': True, 'g': False, 'data': teacher})
 
     return redirect('error')
 
@@ -128,7 +133,8 @@ def set_grading_wrap(request):
             return redirect('/grading/'+sess)
 
         sessions = sessionYear.objects.all()
-        return render(request, 'selectSession.html', context={'session': sessions, 'm': False, 'g': True})
+        teacher = teacherProfile.objects.get(user=request.user)
+        return render(request, 'selectSession.html', context={'session': sessions, 'm': False, 'g': True, 'data': teacher})
 
     return redirect('error')
 

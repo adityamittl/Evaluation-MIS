@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from stem.models import *
 from django.utils.timezone import now
 from django.core.files.storage import FileSystemStorage
@@ -112,12 +113,22 @@ def studentFeedback(request):
     if loginMode.objects.get(user=request.user).type == 'student':
         student = studentProfile.objects.get(user=request.user)
         if request.method == 'POST':
-            star = list(request.POST)[2].split("_")[1]
-            feedback.objects.create(point=star, teacher=teacherProfile.objects.get(
-                employeeId=request.POST.get('teacher_name'), description=request.POST.get('feedback'))).save()
+            star = list(request.POST)[3].split("_")[1]
+            teacher = teacherProfile.objects.get(
+                employeeId=request.POST.get('teacher_name'))
+            feedback.objects.create(point=int(star), teacher=teacher, subject=sessionSubject.objects.get(
+                subject=Subject.objects.get(subjectId=request.POST.get('subName'))), description=request.POST.get('feedback'))
+
             return redirect('feedback')
 
-        return render(request, 'studentFeedback.html', context={'data': student})
+        result = []
+        for ss in student.scoreSheet.filter(current=True):
+            subjects = ss.subjects.all()
+            print(subjects)
+            for sss in subjects:
+                result.append(sss.subject)
+
+        return render(request, 'studentFeedback.html', context={'data': student, 'teachers': result})
 
     return redirect('error')
 
@@ -131,10 +142,11 @@ def pastData(request):
 def fetchTeacher(request):
     if request.method == 'POST':
         scode = json.loads(request.body.decode('utf-8'))['subjectCode']
+        print(scode)
         teachers = Subject.objects.get(subjectId=scode).teachers.all()
         res = {}
         for i in teachers:
-            res[i.employeeID] = i.firstName + " " + i.lastName
+            res[i.employeeId] = i.firstName + " " + i.lastName
 
         print(res)
-        return res
+        return JsonResponse(res)

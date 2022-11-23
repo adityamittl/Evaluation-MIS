@@ -121,22 +121,24 @@
       <div id="manageStudents">
         <div>
           <h2>Teacher's Feedback Section</h2>
-          <select
-            class="form-select form-select-sm"
-            aria-label=".form-select-sm example"
-            name="teacher_name"
-            id="subjectSelect"
-            onchange="selectSubject()"
-            style="margin-top: 50px"
-          >
-            <option selected>Select Subject</option>
-            <option value="1">IDS</option>
-            <option value="2">CSE</option>
-            <option value="2">PPT</option>
-          </select>
         </div>
 
         <form style="width: 60vw" method="POST">
+          <select
+            class="form-select form-select-sm"
+            aria-label=".form-select-sm example"
+            name="subName"
+            id="subjectSelect"
+            onchange="selectSubject()"
+            style="margin-bottom: 50px"
+          >
+            <option selected>Select Subject</option>
+            {%for teacher in teachers%}
+            <option value="{{teacher.subject.subjectId}}">
+              {{teacher.subject.subjectName}}
+            </option>
+            {%endfor%}
+          </select>
           {%csrf_token%}
 
           <select
@@ -225,14 +227,21 @@
         );
         xhr.send(JSON.stringify({ subjectCode: subjectId }));
         xhr.onreadystatechange = function () {
-          var teachers = JSON.parse(this.responseText);
-          eids = Object.keys(teachers);
-          let teacherWrap = document.getElementById("teachersName");
-          for (let i in eids) {
-            let temp = document.createElement("select");
-            temp.value = i;
-            temp.innerHTML = teachers[i];
-            teacherWrap.appendChild(temp);
+          if (xhr.readyState == 4) {
+            console.log(this.responseText);
+            var teachers = JSON.parse(this.responseText);
+            console.log(teachers);
+            eids = Object.keys(teachers);
+            console.log(eids);
+            let teacherWrap = document.getElementById("teachersName");
+            for (let i = 0; i < eids.length; i++) {
+              let val = teachers[eids[i]];
+              console.log(val);
+              let temp = document.createElement("option");
+              temp.value = eids[i];
+              temp.innerHTML = val;
+              teacherWrap.appendChild(temp);
+            }
           }
         };
       };

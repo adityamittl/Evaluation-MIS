@@ -44,8 +44,14 @@
       <!-- Left nevigatoin section to jump onto different sections -->
       <nav>
         <div class="avatarWrap">
-          <div class="avatar"></div>
-          <h2>Lalu Yadav</h2>
+          <div class="avatar" style="display: grid; place-items: center">
+            <img
+              src="/media/profilePhoto/{{data.photo}}"
+              alt="Profile Photo"
+              height="100%"
+            />
+          </div>
+          <h2>{{data.firstName}} {{data.lastName}}</h2>
           <h3>(Teacher)</h3>
         </div>
         <ul class="navigation">
@@ -82,10 +88,11 @@
               </tr>
             </thead>
             <tbody class="table-group-divider">
+              {%for feedback in feedbacks%}
               <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{feedback.subject.subject.subjectId}}</td>
+                <td>{{feedback.subject.subject.subjectName}}</td>
                 <td>4</td>
                 <td>
                   <div class="accordion accordion-item" id="accordionExample">
@@ -94,9 +101,9 @@
                         class="accordion-button btn-outline-secondary collapsed"
                         type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target="#collapseOne"
+                        data-bs-target="#collapse{{forloop.counter}}"
                         aria-expanded="false"
-                        aria-controls="collapseOne"
+                        aria-controls="collapse{{forloop.counter}}"
                       >
                         More Info
                       </button>
@@ -107,137 +114,21 @@
               <tr>
                 <td colspan="5" style="padding: 0px">
                   <div
-                    id="collapseOne"
+                    id="collapse{{forloop.counter}}"
                     class="accordion accordion-item accordion-collapse collapse"
-                    aria-labelledby="headingOne"
+                    aria-labelledby="heading{{forloop.counter}}"
                     data-bs-parent="#accordionExample"
                   >
                     <div
                       class="accordion-body"
                       style="height: 50vh; overflow-y: scroll"
                     >
-                      <strong>This is the first item's accordion body.</strong>
-                      It is shown by default, until the collapse plugin adds the
-                      appropriate classes that we use to style each element.
-                      These classes control the overall appearance, as well as
-                      the showing and hiding via CSS transitions. You can modify
-                      any of this with custom CSS or overriding our default
-                      variables. It's also worth noting that just about any HTML
-                      can go within the Lorem ipsum dolor sit amet consectetur,
-                      adipisicing elit. Perspiciatis dolorum dolor tempore,
-                      nihil animi sapiente libero? Sint, laboriosam quia? Minus,
-                      aliquam quos at nemo laboriosam excepturi. Voluptate
-                      similique odio autem!
-                      <code>.accordion-body</code>, though the transition does
-                      limit overflow.
+                      {{feedback.description}}
                     </div>
                   </div>
                 </td>
               </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>4</td>
-                <td>
-                  <div class="accordion accordion-item" id="accordionExample">
-                    <h2 class="accordion-header" id="headingTwo">
-                      <button
-                        class="accordion-button btn-outline-secondary collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseTwo"
-                        aria-expanded="false"
-                        aria-controls="collapseTwo"
-                      >
-                        More Info
-                      </button>
-                    </h2>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="5" style="padding: 0px">
-                  <div
-                    id="collapseTwo"
-                    class="accordion accordion-item accordion-collapse collapse"
-                    aria-labelledby="headingTwo"
-                    data-bs-parent="#accordionExample"
-                  >
-                    <div
-                      class="accordion-body"
-                      style="height: 50vh; overflow-y: scroll"
-                    >
-                      <strong>This is the first item's accordion body.</strong>
-                      It is shown by default, until the collapse plugin adds the
-                      appropriate classes that we use to style each element.
-                      These classes control the overall appearance, as well as
-                      the showing and hiding via CSS transitions. You can modify
-                      any of this with custom CSS or overriding our default
-                      variables. It's also worth noting that just about any HTML
-                      can go within the Lorem ipsum dolor sit amet consectetur,
-                      adipisicing elit. Perspiciatis dolorum dolor tempore,
-                      nihil animi sapiente libero? Sint, laboriosam quia? Minus,
-                      aliquam quos at nemo laboriosam excepturi. Voluptate
-                      similique odio autem!
-                      <code>.accordion-body</code>, though the transition does
-                      limit overflow.
-                    </div>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>Doe</td>
-                <td>4</td>
-                <td>
-                  <div class="accordion accordion-item" id="accordionExample">
-                    <h2 class="accordion-header" id="headingThree">
-                      <button
-                        class="accordion-button btn-outline-secondary collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseThree"
-                        aria-expanded="false"
-                        aria-controls="collapseThree"
-                      >
-                        More Info
-                      </button>
-                    </h2>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="5" style="padding: 0px">
-                  <div
-                    id="collapseThree"
-                    class="accordion accordion-item accordion-collapse collapse"
-                    aria-labelledby="headingThree"
-                    data-bs-parent="#accordionExample"
-                  >
-                    <div
-                      class="accordion-body"
-                      style="height: 50vh; overflow-y: scroll"
-                    >
-                      <strong>This is the first item's accordion body.</strong>
-                      It is shown by default, until the collapse plugin adds the
-                      appropriate classes that we use to style each element.
-                      These classes control the overall appearance, as well as
-                      the showing and hiding via CSS transitions. You can modify
-                      any of this with custom CSS or overriding our default
-                      variables. It's also worth noting that just about any HTML
-                      can go within the Lorem ipsum dolor sit amet consectetur,
-                      adipisicing elit. Perspiciatis dolorum dolor tempore,
-                      nihil animi sapiente libero? Sint, laboriosam quia? Minus,
-                      aliquam quos at nemo laboriosam excepturi. Voluptate
-                      similique odio autem!
-                      <code>.accordion-body</code>, though the transition does
-                      limit overflow.
-                    </div>
-                  </div>
-                </td>
-              </tr>
+              {%endfor%}
             </tbody>
           </table>
         </div>

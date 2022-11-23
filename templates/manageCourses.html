@@ -43,8 +43,14 @@
       <!-- Left nevigatoin section to jump onto different sections -->
       <nav>
         <div class="avatarWrap">
-          <div class="avatar"></div>
-          <h2>Lalu Yadav</h2>
+          <div class="avatar" style="display: grid; place-items: center">
+            <img
+              src="/media/profilePhoto/{{data.photo}}"
+              alt="Profile Photo"
+              height="100%"
+            />
+          </div>
+          <h2>{{data.firstName}} {{data.lastName}}</h2>
           <h3>(Teacher)</h3>
         </div>
         <ul class="navigation">
