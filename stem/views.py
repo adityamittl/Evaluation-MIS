@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from student.views import studentHome
 from stem.mail import sendmail
-
+from teacher.views import edit_profile
 
 import json
 from .excelRead import extractData, givePassword
@@ -230,6 +230,8 @@ def dashboard(request):
         return administratorHome(request)
     elif loginMode.objects.get(user=request.user).type == 'student':
         return studentHome(request)
+    elif loginMode.objects.get(user=request.user).type == 'teacher':
+        return edit_profile(request)
 
 
 def adminFeedback(request):

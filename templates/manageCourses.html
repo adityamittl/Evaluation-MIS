@@ -59,6 +59,7 @@
       </nav>
 
       <div id="manageCourses">
+        {%csrf_token%}
         <div style="display: flex; flex-direction: column">
           <nav class="navbar bg-light" style="height: 60px; width: 100%">
             <div class="container-fluid">
@@ -66,19 +67,17 @@
             </div>
           </nav>
           <div class="row" style="padding: 10px; width: 60%">
+            {%for course in courses%}
             <div class="col-sm-4">
-              <div class="card">
+              <div class="card" style="height: 200px; text-align: center">
                 <div class="card-body">
-                  <h5 class="card-title">Course 1</h5>
-                  <p class="card-text">
-                    With supporting text below as a natural lead-in to
-                    additional content.
-                  </p>
+                  <h5 class="card-title">{{course.subject.subjectId}}</h5>
+                  <p class="card-text">{{course.subject.subjectName}}</p>
                   <button
                     class="btn btn-primary"
                     type="button"
                     data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasBottom1"
+                    data-bs-target="#offcanvasBottom{{course.subject.subjectId}}"
                     aria-controls="offcanvasBottom"
                   >
                     Edit Evaluation Scheme
@@ -87,7 +86,7 @@
                   <div
                     class="offcanvas offcanvas-bottom"
                     tabindex="-1"
-                    id="offcanvasBottom1"
+                    id="offcanvasBottom{{course.subject.subjectId}}"
                     aria-labelledby="offcanvasBottomLabel"
                     style="height: 70vh"
                   >
@@ -113,321 +112,51 @@
                             <th scope="col"></th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody
+                          id="evaluationModule{{course.subject.subjectId}}"
+                        >
                           <tr>
-                            <th scope="row">1</th>
+                            <th
+                              scope="row"
+                              id="rid{{course.subject.subjectId}}1"
+                            >
+                              1
+                            </th>
                             <td>
                               <div class="col-auto">
-                                <input type="text" class="form-control" />
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  id="topic{{course.subject.subjectId}}1"
+                                />
                               </div>
                             </td>
                             <td>
                               <div class="col-auto">
-                                <input type="text" class="form-control" />
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  id="weightage{{course.subject.subjectId}}1"
+                                />
                               </div>
                             </td>
                             <td>
                               <div class="col-auto">
-                                <input type="text" class="form-control" />
+                                <input
+                                  type="number"
+                                  class="form-control"
+                                  id="score{{course.subject.subjectId}}1"
+                                />
                               </div>
                             </td>
                             <td>
                               <button
                                 type="button"
-                                class="btn btn-outline-danger"
+                                class="btn btn-outline-warning"
+                                onclick="totalValue('{{course.subject.subjectId}}')"
                               >
-                                Delete
+                                Save
                               </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">2</th>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger"
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">3</th>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger"
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <button type="button" class="btn btn-outline-primary">
-                        + Add More
-                      </button>
-                      <table
-                        class="table table-bordered border-success"
-                        style="margin-top: 16px"
-                      >
-                        <tbody>
-                          <tr>
-                            <th scope="row" colspan="2">Total</th>
-                            <td>Weightage</td>
-                            <td>Score</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Course 2</h5>
-                  <p class="card-text">
-                    With supporting text below as a natural lead-in to
-                    additional content.
-                  </p>
-                  <button
-                    class="btn btn-primary"
-                    type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasBottom2"
-                    aria-controls="offcanvasBottom"
-                  >
-                    Edit Evaluation Scheme
-                  </button>
-
-                  <div
-                    class="offcanvas offcanvas-bottom"
-                    tabindex="-1"
-                    id="offcanvasBottom2"
-                    aria-labelledby="offcanvasBottomLabel"
-                    style="height: 70vh"
-                  >
-                    <div class="offcanvas-header">
-                      <h5 class="offcanvas-title" id="offcanvasBottomLabel">
-                        Evaluation Scheme
-                      </h5>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="offcanvas"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="offcanvas-body small">
-                      <table class="table table-hover">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Topic</th>
-                            <th scope="col">Weightage</th>
-                            <th scope="col">Maximum Score</th>
-                            <th scope="col"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger"
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">2</th>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger"
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <th scope="row">3</th>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                class="btn btn-outline-danger"
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <button type="button" class="btn btn-outline-primary">
-                        + Add More
-                      </button>
-                      <table
-                        class="table table-bordered border-success"
-                        style="margin-top: 16px"
-                      >
-                        <tbody>
-                          <tr>
-                            <th scope="row" colspan="2">Total</th>
-                            <td>Weightage</td>
-                            <td>Score</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Course 3</h5>
-                  <p class="card-text">
-                    With supporting text below as a natural lead-in to
-                    additional content.
-                  </p>
-                  <button
-                    class="btn btn-primary"
-                    type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasBottom3"
-                    aria-controls="offcanvasBottom"
-                  >
-                    Edit Evaluation Scheme
-                  </button>
-
-                  <div
-                    class="offcanvas offcanvas-bottom"
-                    tabindex="-1"
-                    id="offcanvasBottom3"
-                    aria-labelledby="offcanvasBottomLabel"
-                    style="height: 70vh"
-                  >
-                    <div class="offcanvas-header">
-                      <h5 class="offcanvas-title" id="offcanvasBottomLabel">
-                        Evaluation Scheme
-                      </h5>
-                      <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="offcanvas"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div class="offcanvas-body small">
-                      <table class="table table-hover">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Topic</th>
-                            <th scope="col">Weightage</th>
-                            <th scope="col">Maximum Score</th>
-                            <th scope="col"></th>
-                          </tr>
-                        </thead>
-                        <tbody id="evaluationModules">
-                          <tr>
-                            <th scope="row">1</th>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
-                              <div class="col-auto">
-                                <input type="text" class="form-control" />
-                              </div>
-                            </td>
-                            <td>
                               <button
                                 type="button"
                                 class="btn btn-outline-danger"
@@ -441,19 +170,36 @@
                       <button
                         type="button"
                         class="btn btn-outline-primary"
-                        onclick="addField()"
+                        onclick="addField('{{course.subject.subjectId}}')"
                       >
                         + Add More
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-success"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasBottom{{course.subject.subjectId}}"
+                        aria-controls="offcanvasBottom"
+                        onclick="submitCourse('{{course.subject.subjectId}}')"
+                      >
+                        Submit
                       </button>
                       <table
                         class="table table-bordered border-success"
                         style="margin-top: 16px"
                       >
+                        <thead>
+                          <th>Total Weightage</th>
+                          <th>Total Score</th>
+                        </thead>
                         <tbody>
                           <tr>
-                            <th scope="row" colspan="2">Total</th>
-                            <td>Weightage</td>
-                            <td>Score</td>
+                            <td id="showWeightage{{course.subject.subjectId}}">
+                              0
+                            </td>
+                            <td id="showScore{{course.subject.subjectId}}">
+                              0
+                            </td>
                           </tr>
                         </tbody>
                       </table>
@@ -462,6 +208,7 @@
                 </div>
               </div>
             </div>
+            {%endfor%}
           </div>
         </div>
       </div>
@@ -470,20 +217,26 @@
 
     <div class="circle1 circle"></div>
     <div class="circle2 circle"></div>
-
     <script>
-      let count = 2;
-      const addField = () => {
+      let count = {};
+      const addField = (sid) => {
+        if (!count[sid]) {
+          count[sid] = 1;
+          console.log("===");
+        }
         let rowWrap = document.createElement("tr");
         let firstElement = document.createElement("th");
         firstElement.setAttribute("scope", "row");
-        firstElement.innerHTML = count++;
+        firstElement.innerHTML = ++count[sid];
+        firstElement.setAttribute("id", `rid${sid}${count[sid]}`);
         rowWrap.appendChild(firstElement);
+        let ids = ["topic", "weightage", "score"];
         for (let i = 0; i < 3; i++) {
           let secondWrap = document.createElement("td");
           let innerDiv = document.createElement("div");
           innerDiv.setAttribute("class", "col-auto");
           let innerDivInput = document.createElement("input");
+          innerDivInput.setAttribute("id", `${ids[i]}${sid}${count[sid]}`);
           innerDivInput.setAttribute("type", "text");
           innerDivInput.setAttribute("class", "form-control");
           //innerDivInput.setAttribute();
@@ -496,9 +249,77 @@
         button.setAttribute("type", "button");
         button.setAttribute("class", "btn btn-outline-danger");
         button.innerHTML = "Delete";
+
+        let button2 = document.createElement("button");
+        button2.setAttribute("type", "button");
+        button2.setAttribute("class", "btn btn-outline-warning");
+        button2.innerHTML = "Save";
+        button2.setAttribute("onclick", `totalValue('${sid}')`);
+
+        delButtonWrap.appendChild(button2);
         delButtonWrap.appendChild(button);
         rowWrap.appendChild(delButtonWrap);
-        document.getElementById("evaluationModules").appendChild(rowWrap);
+        document.getElementById(`evaluationModule${sid}`).appendChild(rowWrap);
+      };
+
+      const totalValue = (cid) => {
+        if (!count[cid]) {
+          count[cid] = 1;
+        }
+        let val = document.getElementById(`score${cid}${count[cid]}`).value;
+        let totalScore = document.getElementById(`showScore${cid}`);
+        let score = parseInt(totalScore.innerHTML) + parseInt(val);
+        totalScore.innerHTML = score;
+
+        let weightage = document.getElementById(
+          `weightage${cid}${count[cid]}`
+        ).value;
+
+        let totalWeightage = document.getElementById(`showWeightage${cid}`);
+        let wei = parseInt(totalWeightage.innerHTML) + parseInt(weightage);
+        totalWeightage.innerHTML = wei;
+      };
+
+      const serverCall = (data) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/submitEvalModules");
+        xhr.setRequestHeader(
+          "X-CSRFToken",
+          document.getElementsByName("csrfmiddlewaretoken")[0].value
+        );
+        xhr.send(JSON.stringify(data));
+        xhr.onreadystatechange = function () {
+          var data = JSON.parse(this.responseText);
+          if (data["type"] == "success") {
+            alert("Evaluation Scheme has been set");
+          } else {
+            alert("Evaluation Scheme already Exists");
+          }
+        };
+      };
+
+      const submitCourse = (cid) => {
+        if (!count[cid]) {
+          alert("Add evaluation First");
+        }
+
+        let rows = count[cid];
+        let data = {};
+        data["courseId"] = cid;
+        data["session"] = String(window.location).split("/")[4];
+        for (let i = 1; i <= rows; i++) {
+          let evname = document.getElementById(`topic${cid}${i}`).value;
+          let weightage = document.getElementById(`weightage${cid}${i}`).value;
+          let score = document.getElementById(`score${cid}${i}`).value;
+          let temp = {
+            evname: evname,
+            score: score,
+            weightage: weightage,
+          };
+          data[i] = temp;
+        }
+        console.log(data);
+        serverCall(data);
       };
     </script>
   </body>
