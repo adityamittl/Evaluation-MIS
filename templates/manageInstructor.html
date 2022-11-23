@@ -67,12 +67,17 @@
           <h3>(Administrator)</h3>
         </div>
         <ul class="navigation">
-          <li>Manage Students</li>
-          <li class="active">Manage Instructors</li>
-          <li>Manage Courses</li>
-          <li>Registration Window</li>
-          <li>Feedbacks</li>
-          <li>Settings</li>
+          <li onclick="window.location.href = '/'">Manage Students</li>
+          <li onclick="window.location.href = '/instructor'" class="active">
+            Manage Instructors
+          </li>
+          <li onclick="window.location.href = '/course'">Manage Courses</li>
+          <li onclick="window.location.href = '/registrationSetup'">
+            Registration Window
+          </li>
+          <li onclick="window.location.href = '#'">Feedbacks</li>
+          <li onclick="window.location.href = '#'">Settings</li>
+          <li onclick="window.location.href = '/signout'">Logout</li>
         </ul>
       </nav>
 

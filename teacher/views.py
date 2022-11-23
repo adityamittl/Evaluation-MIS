@@ -67,6 +67,7 @@ def set_grading(request, session):
                 if teacher.user == request.user:
                     course.append(sessionSubject.objects.get(
                         subject=subjs, sessionName=sess))
+
         return render(request, 'teacherGrading.html', context={'courses': course})
 
     return redirect('error')
@@ -94,8 +95,10 @@ def set_eval_modules(request):
                             evaluationMethod=scheme, Score=0)
                         x.scoreSheet.add(sc)
                         x.save()
+
                     ss.evaluation.add(scheme)
                     ss.save()
+
                 ss.schemeSet = True
                 ss.save()
 
@@ -110,6 +113,7 @@ def manage_courses_wrap(request):
         if request.method == "POST":
             sess = request.POST.get('session')
             return redirect('/manageCourses/'+sess)
+
         sessions = sessionYear.objects.all()
         return render(request, 'selectSession.html', context={'session': sessions, 'm': True, 'g': False})
 
@@ -122,6 +126,7 @@ def set_grading_wrap(request):
         if request.method == "POST":
             sess = request.POST.get('session')
             return redirect('/grading/'+sess)
+
         sessions = sessionYear.objects.all()
         return render(request, 'selectSession.html', context={'session': sessions, 'm': False, 'g': True})
 
@@ -143,12 +148,13 @@ def fetchStudents(request):
             for k in x.subjects.all():
                 if k.subject == subj:
                     temp = {
-                        'name': stu.firstName+" "+stu.lastName,
+                        'name': stu.firstName + " " + stu.lastName,
                         'roll': stu.rollNumber,
                         'id': k.id
                     }
 
                     data.append(temp)
+
     print(data)
     return JsonResponse({'data': data})
 
@@ -170,4 +176,7 @@ def submitStudentMark(request):
 
                 sheet.total = sum_score
                 sheet.save()
-        return JsonResponse({"type": "success"})
+
+            return JsonResponse({"type": "success"})
+
+        return JsonResponse({"type": "error"})

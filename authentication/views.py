@@ -8,26 +8,23 @@ from django.contrib.auth.models import User
 def signin(request):
     if request.user.is_authenticated:
         return redirect("/")
-    if request.method =='POST':
+    if request.method == 'POST':
         username = request.POST['username']
         password1 = request.POST['password']
-        print(username,password1)
-        user = authenticate(request, username = username, password = password1)
+        print(username, password1)
+        user = authenticate(request, username=username, password=password1)
         print(user)
         if user is not None:
-            login(request,user)
+            login(request, user)
             return redirect('/')
         else:
             form = AuthenticationForm(request.POST)
-            return render(request,'login.html',{'form':form})
+            return render(request, 'login.html', {'form': form})
     else:
         form = AuthenticationForm()
-        return render(request,'login.html',{'form':form})
-
+        return render(request, 'login.html', {'form': form})
 
 
 def signout(request):
     logout(request)
     return redirect('/')
-
-
