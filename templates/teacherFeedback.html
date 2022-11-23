@@ -33,9 +33,8 @@
       }
 
       #showFeedback {
-        display: grid;
         place-items: center;
-        width: 100%;
+        width: 80vw;
         overflow-y: scroll;
       }
     </style>
@@ -63,7 +62,185 @@
       </nav>
 
       <div id="showFeedback">
-        <p>Show Feedback</p>
+        <div style="display: flex; flex-direction: column; align-items: center">
+          <nav class="navbar bg-light" style="height: 60px; width: 100%">
+            <div class="container-fluid">
+              <span class="navbar-brand mb-0 h1">Feedback</span>
+            </div>
+          </nav>
+          <table
+            style="width: 60vw; margin-top: 100px"
+            class="table table-hover table-bordered"
+          >
+            <thead style="border-bottom: 2px solid black">
+              <tr>
+                <th scope="col">S.No.</th>
+                <th scope="col">Subject Code</th>
+                <th scope="col">Subject Name</th>
+                <th scope="col">Average Rating</th>
+                <th scope="col">Feedback</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>4</td>
+                <td>
+                  <div class="accordion accordion-item" id="accordionExample">
+                    <h2 class="accordion-header" id="headingOne">
+                      <button
+                        class="accordion-button btn-outline-secondary collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne"
+                        aria-expanded="false"
+                        aria-controls="collapseOne"
+                      >
+                        More Info
+                      </button>
+                    </h2>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="5" style="padding: 0px">
+                  <div
+                    id="collapseOne"
+                    class="accordion accordion-item accordion-collapse collapse"
+                    aria-labelledby="headingOne"
+                    data-bs-parent="#accordionExample"
+                  >
+                    <div
+                      class="accordion-body"
+                      style="height: 50vh; overflow-y: scroll"
+                    >
+                      <strong>This is the first item's accordion body.</strong>
+                      It is shown by default, until the collapse plugin adds the
+                      appropriate classes that we use to style each element.
+                      These classes control the overall appearance, as well as
+                      the showing and hiding via CSS transitions. You can modify
+                      any of this with custom CSS or overriding our default
+                      variables. It's also worth noting that just about any HTML
+                      can go within the Lorem ipsum dolor sit amet consectetur,
+                      adipisicing elit. Perspiciatis dolorum dolor tempore,
+                      nihil animi sapiente libero? Sint, laboriosam quia? Minus,
+                      aliquam quos at nemo laboriosam excepturi. Voluptate
+                      similique odio autem!
+                      <code>.accordion-body</code>, though the transition does
+                      limit overflow.
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>4</td>
+                <td>
+                  <div class="accordion accordion-item" id="accordionExample">
+                    <h2 class="accordion-header" id="headingTwo">
+                      <button
+                        class="accordion-button btn-outline-secondary collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseTwo"
+                        aria-expanded="false"
+                        aria-controls="collapseTwo"
+                      >
+                        More Info
+                      </button>
+                    </h2>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="5" style="padding: 0px">
+                  <div
+                    id="collapseTwo"
+                    class="accordion accordion-item accordion-collapse collapse"
+                    aria-labelledby="headingTwo"
+                    data-bs-parent="#accordionExample"
+                  >
+                    <div
+                      class="accordion-body"
+                      style="height: 50vh; overflow-y: scroll"
+                    >
+                      <strong>This is the first item's accordion body.</strong>
+                      It is shown by default, until the collapse plugin adds the
+                      appropriate classes that we use to style each element.
+                      These classes control the overall appearance, as well as
+                      the showing and hiding via CSS transitions. You can modify
+                      any of this with custom CSS or overriding our default
+                      variables. It's also worth noting that just about any HTML
+                      can go within the Lorem ipsum dolor sit amet consectetur,
+                      adipisicing elit. Perspiciatis dolorum dolor tempore,
+                      nihil animi sapiente libero? Sint, laboriosam quia? Minus,
+                      aliquam quos at nemo laboriosam excepturi. Voluptate
+                      similique odio autem!
+                      <code>.accordion-body</code>, though the transition does
+                      limit overflow.
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>Doe</td>
+                <td>4</td>
+                <td>
+                  <div class="accordion accordion-item" id="accordionExample">
+                    <h2 class="accordion-header" id="headingThree">
+                      <button
+                        class="accordion-button btn-outline-secondary collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree"
+                        aria-expanded="false"
+                        aria-controls="collapseThree"
+                      >
+                        More Info
+                      </button>
+                    </h2>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="5" style="padding: 0px">
+                  <div
+                    id="collapseThree"
+                    class="accordion accordion-item accordion-collapse collapse"
+                    aria-labelledby="headingThree"
+                    data-bs-parent="#accordionExample"
+                  >
+                    <div
+                      class="accordion-body"
+                      style="height: 50vh; overflow-y: scroll"
+                    >
+                      <strong>This is the first item's accordion body.</strong>
+                      It is shown by default, until the collapse plugin adds the
+                      appropriate classes that we use to style each element.
+                      These classes control the overall appearance, as well as
+                      the showing and hiding via CSS transitions. You can modify
+                      any of this with custom CSS or overriding our default
+                      variables. It's also worth noting that just about any HTML
+                      can go within the Lorem ipsum dolor sit amet consectetur,
+                      adipisicing elit. Perspiciatis dolorum dolor tempore,
+                      nihil animi sapiente libero? Sint, laboriosam quia? Minus,
+                      aliquam quos at nemo laboriosam excepturi. Voluptate
+                      similique odio autem!
+                      <code>.accordion-body</code>, though the transition does
+                      limit overflow.
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- glass morphology elements -->
