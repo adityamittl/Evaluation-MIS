@@ -2,8 +2,9 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('courseregistration',courseRegistration),
+    path('courseregistration',courseRegistration,name='courseRegister'),
     path('currentScore',currentSheet),
-    path('feedback',studentFeedback),
-    path('data',pastData)
+    path('feedback',studentFeedback,name='feedback'),
+    path('data',pastData),
+    path('fetchTeacher',fetchTeacher)
 ]

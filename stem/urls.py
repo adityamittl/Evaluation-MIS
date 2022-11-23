@@ -4,7 +4,7 @@ from .views import *
 urlpatterns = [
     # path('adminnis',administrator),
     path('fetchstudent', fetchStudent),
-    path('instructor', manageInstructor),
+    path('instructor', manageInstructor,name='instructor'),
     path('duplicateEID', duplicateEID),
     path('course', manageCourse),
     path('course/edit/<str:cid>',editCourse),

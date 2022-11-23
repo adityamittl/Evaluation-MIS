@@ -60,7 +60,7 @@ def administratorHome(request):
             newUser.save()
             loginMode.objects.create(user=newUser, type="student").save()
             buildStudentProfile(fetchedData[rollnumber], rollnumber,newUser)
-            sendmail(newUser.firstName + newUser.lastName, rollnumber+"@lnmiit.ac.in",rollnumber,fetchedData[rollnumber]["password"])
+            sendmail(fetchedData[rollnumber]["First Name"] +" "+fetchedData[rollnumber]["Last name"] , rollnumber+"@lnmiit.ac.in",rollnumber,fetchedData[rollnumber]["password"])
         print("successful")
         return redirect('dashboard')
 
@@ -100,16 +100,21 @@ def fetchStudent(request):
 @login_required
 def manageInstructor(request):
     if loginMode.objects.get(user = request.user).type == 'admin':
+        domains = branches.objects.all()
+        teachers = teacherProfile.objects.all()
         if request.method == 'POST':
+            print(request.POST)
             eid, fname,lname,department= request.POST.get('instructor'),request.POST.get('fname'), request.POST.get('lname'), request.POST.get('department')
+            # print(eid,fname,lname,department)
             pswd = givePassword()
-            newusr = User.objects.create(eid)
-            newusr.password = pswd
-            newusr.save()
-
+            newusr = User.objects.create_user(eid,'',pswd)
+            branch = branches.objects.get(subcode = department)
+            teacherProfile.objects.create(user = newusr,employeeId = eid, firstName = fname, lastName = lname, department = branch).save()
+            sendmail(fname+" "+lname, eid+"@lnmiit.ac.in",eid, pswd)
             loginMode.objects.create(user = newusr, type = 'teacher').save()
             
-        return render(request, 'manageInstructor.html')
+            return redirect('instructor')
+        return render(request, 'manageInstructor.html',context={'data':domains,'teacher':teachers})
     else:
         return redirect('error')
 
@@ -205,3 +210,7 @@ def dashboard(request):
         return administratorHome(request)
     elif loginMode.objects.get(user = request.user).type == 'student':
         return studentHome(request)
+
+
+def adminFeedback(request):
+    return render(request, 'adminfeedback.html')

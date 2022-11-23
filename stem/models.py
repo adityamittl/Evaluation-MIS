@@ -33,7 +33,7 @@ class teacherProfile(models.Model):
     email = models.CharField(max_length = 50,  null = True, blank = True)
     photo = models.ImageField(null = True, blank = True)
     rating = models.FloatField(default = 0)
-    department = models.CharField(max_length = 40, null = True, blank = True)
+    department = models.ForeignKey(branches, on_delete = models.CASCADE, null=True)
 
 class evaluationScheme(models.Model):
     name = models.CharField(max_length = 50)
@@ -50,10 +50,13 @@ class Subject(models.Model):
     subjectId = models.CharField(max_length = 50)
     subjectName = models.CharField(max_length = 100)
     credits = models.IntegerField()
-    teachers = models.ForeignKey(teacherProfile, on_delete = models.CASCADE, null=True, blank=True)
+    teachers = models.ManyToManyField(teacherProfile, null=True, blank=True)
     subjectType = models.CharField(max_length = 20)
     offeredSem = models.CharField(max_length = 20)
     totalSeats = models.IntegerField(default = 0)
+
+    def __str__ (self):
+        return self.subjectId
 
 # year in the session.
 class sessionSubject(models.Model):
@@ -119,4 +122,5 @@ class loginMode(models.Model):
 class feedback(models.Model):
     point = models.IntegerField(default = 0)
     teacher = models.ForeignKey(teacherProfile, on_delete = models.CASCADE)
+    subject = models.ForeignKey(sessionSubject, on_delete=models.CASCADE, null = True)
     description = models.TextField()

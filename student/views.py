@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from stem.models import *
 from django.utils.timezone import now
 from django.core.files.storage import FileSystemStorage
+import json
 
 
 # Create your views here.
@@ -39,10 +40,10 @@ def courseRegistration(request):
         time_t = currentRegistrations.objects.all()[0].registrationStart
 
         if(student.currentSemRegister):
-            return render(request, 'courseRegistraton.html', context={'start': False,'Registration':True})
+            return render(request, 'courseRegistraton.html', context={'start': False,'Registration':True,'data':student})
         
         elif time_t >  now():
-            return render(request, 'courseRegistraton.html', context={'start' : False,'time':str(time_t).split("+")[0]})
+            return render(request, 'courseRegistraton.html', context={'start' : False,'time':str(time_t).split("+")[0],'data':student})
         
         else:
             sem = student.currentSem
@@ -78,21 +79,24 @@ def courseRegistration(request):
                     sheet.save()
                     student.scoreSheet.add(sheet)
                 student.save()
-            return render(request, 'courseRegistraton.html', context={'start':True,'subjects':subjects})
+                return redirect('courseRegister')
+            return render(request, 'courseRegistraton.html', context={'start':True,'subjects':subjects,'data':student})
     else:
         return redirect('error')
 
 @login_required
 def currentSheet(request):
     if loginMode.objects.get(user = request.user).type == 'student':
-        student = studentProfile.objects.get(user = request.user).scoreSheet.all()
+        student = studentProfile.objects.get(user = request.user)
+        scoresheet = student.scoreSheet.all()
         current = ''
-        for i in student:
+        for i in scoresheet:
             if i.current == True:
                 current = i
         
-        y = i.subjects.all()
-        return render(request,'currentSemScore.html', context={'subs':y})
+        y = current.subjects.all()
+        print(y)
+        return render(request,'currentSemScore.html', context={'subs':y,'prof':student})
     
     else:
         return redirect('error')
@@ -100,16 +104,29 @@ def currentSheet(request):
 @login_required
 def studentFeedback(request):
     if loginMode.objects.get(user = request.user).type == 'student':
-        studentProfile.objects.get(user = request.user)
+        student = studentProfile.objects.get(user = request.user)
         if request.method == 'POST':
             star = list(request.POST)[2].split("_")[1]
             feedback.objects.create(point = star, teacher = teacherProfile.objects.get(employeeId = request.POST.get('teacher_name'), description = request.POST.get('feedback'))).save()
-            return render(request,'studentFeedback.html')
+            return redirect('feedback')
 
-        return render(request,'studentFeedback.html')
+        return render(request,'studentFeedback.html',context={'data':student})
     else:
         return redirect('error')
 
 @login_required
 def pastData(request):
     return render(request, 'CumulativeResults.html')
+
+@login_required
+def fetchTeacher(request):
+    if request.method == 'POST':
+        scode = json.loads(request.body.decode('utf-8'))['subjectCode']
+        teachers = Subject.objects.get(subjectId = scode).teachers.all()
+        res = {}
+        for i in teachers:
+            res[i.employeeID] = i.firstName+" "+ i.lastName
+        
+        print(res)
+    
+        return res

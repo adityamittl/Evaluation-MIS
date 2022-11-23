@@ -114,8 +114,9 @@
         <!-- Left nevigatoin section to jump onto different sections -->
         <nav>
             <div class="avatarWrap">
-                <div class="avatar"></div>
-                <h2>Akhilesh Yadav</h2>
+                <div class="avatar" style="display: grid; place-items: center;"> <img
+                        src="/media/profilePhoto/{{data.photo}}" alt="Profile Photo" height="100%"></div>
+                <h2>{{data.firstName}} {{data.lastName}}</h2>
                 <h3>(Student)</h3>
             </div>
             <ul class="navigation">
@@ -129,16 +130,25 @@
         </nav>
 
         <div id="manageStudents">
-            <form style="width: 60vw;"  method="POST">
-                {%csrf_token%}
+            <div>
                 <h2>Teacher's Feedback Section</h2>
+                <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="teacher_name"
+                    id="subjectSelect" onchange="selectSubject()" style="margin-top: 50px;">
+                    <option selected>Select Subject</option>
+                    <option value="1">IDS</option>
+                    <option value="2">CSE </option>
+                    <option value="2">PPT </option>
+                </select>
+            </div>
 
 
-                <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="teacher_name">
+            <form style="width: 60vw;" method="POST">
+                {%csrf_token%}
+
+
+                <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="teacher_name"
+                    id="teachersName">
                     <option selected>Select faculty</option>
-                    <option value="1">Dr. Vikas Bajpai</option>
-                    <option value="2">Dr. Anukriti Bansal </option>
-                    <option value="2">Dr. Shweta Saharan </option>
                 </select>
 
                 <div style="width: 60vw; display: grid; place-items: center;">
@@ -167,7 +177,8 @@
                         <label class="star star-1" for="star-1"></label>
 
                     </div>
-                    <textarea class="form-control" aria-label="With textarea" rows="17" placeholder="Enter your Feedback" name="feedback"></textarea>
+                    <textarea class="form-control" aria-label="With textarea" rows="17"
+                        placeholder="Enter your Feedback" name="feedback"></textarea>
 
                 </div><br>
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -184,6 +195,37 @@
         <div class="circle1 circle"></div>
         <div class="circle2 circle"></div>
     </section>
+
+    <script>
+
+        const fetchTechers = (subjectId) => {
+            console.log("----", subjectId)
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/fetchTeacher');
+            xhr.setRequestHeader('X-CSRFToken', document.getElementsByName('csrfmiddlewaretoken')[0].value);
+            xhr.send(JSON.stringify({ subjectCode: subjectId }));
+            xhr.onreadystatechange = function () {
+
+                var teachers = JSON.parse(this.responseText);
+                eids = Object.keys(teachers);
+                let teacherWrap = document.getElementById('teachersName');
+                for (let i in eids) {
+                    let temp = document.createElement('select')
+                    temp.value = i;
+                    temp.innerHTML = teachers[i];
+                    teacherWrap.appendChild(temp);
+                }
+            }
+        }
+
+
+        async function selectSubject() {
+            let val = document.getElementById('subjectSelect').value;
+            teachers = await fetchTechers(val);
+
+
+        }
+    </script>
 </body>
 
 </html>
