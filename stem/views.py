@@ -22,10 +22,10 @@ degreeYears = {
     'UG': 8,
     'PG': 4,
 }
-# section of code for the administrator section
 
 
 def breakRollNo(rollno):
+    # section of code for the administrator section
 
     year = "20" + rollno[:2]
     degreetype = rollno[2:3]
@@ -58,14 +58,18 @@ def administratorHome(request):
         filename = fs.save(studentData.name, studentData)
         fetchedData = extractData("./media/enrollmentSheet/" + filename)
         for rollnumber in fetchedData.keys():
-            newUser = User.objects.create_user(
-                rollnumber, '', fetchedData[rollnumber]["password"])
-            newUser.save()
-            loginMode.objects.create(user=newUser, type="student").save()
-            buildStudentProfile(fetchedData[rollnumber], rollnumber, newUser)
-            sendmail(fetchedData[rollnumber]["First Name"] + " "+fetchedData[rollnumber]["Last name"],
-                     rollnumber+"@lnmiit.ac.in", rollnumber, fetchedData[rollnumber]["password"])
-        print("successful")
+            try:
+                newUser = User.objects.create_user(
+                    rollnumber, '', fetchedData[rollnumber]["password"])
+                newUser.save()
+                loginMode.objects.create(user=newUser, type="student").save()
+                buildStudentProfile(
+                    fetchedData[rollnumber], rollnumber, newUser)
+                sendmail(fetchedData[rollnumber]["First Name"] + " "+fetchedData[rollnumber]["Last name"],
+                         rollnumber+"@lnmiit.ac.in", rollnumber, fetchedData[rollnumber]["password"])
+            except:
+                pass
+
         return redirect('dashboard')
 
     # fetching stats to display on page
@@ -73,6 +77,11 @@ def administratorHome(request):
     tcount = teacherProfile.objects.all().count()
     ccount = Subject.objects.all().count()
     data = {"scount": scount, "tcount": tcount, "ccount": ccount}
+    try:
+        data['data'] = administrator.objects.get(user=request.user)
+    except:
+        data['data'] = []
+
     return render(request, "admin.html", context=data)
 
 
@@ -99,10 +108,9 @@ def fetchStudent(request):
         return JsonResponse(result)
 
 
-# Enroll new instructor into the institute.
-
 @login_required
 def manageInstructor(request):
+    # Enroll new instructor into the institute.
     if loginMode.objects.get(user=request.user).type == 'admin':
         domains = branches.objects.all()
         teachers = teacherProfile.objects.all()
@@ -124,28 +132,37 @@ def manageInstructor(request):
             sbjs.teachers.add(teacher)
             sendmail(fname+" "+lname, eid+"@lnmiit.ac.in", eid, pswd)
             return redirect('instructor')
-        return render(request, 'manageInstructor.html', context={'data': domains, 'teacher': teachers, 'subs': subjs})
-    else:
-        return redirect('error')
 
-# Check if the written employee id is is conflict with someone.
+        try:
+            data2 = administrator.objects.get(user=request.user)
+        except:
+            data2 = []
+
+        return render(request, 'manageInstructor.html', context={'data': domains, 'teacher': teachers, 'subs': subjs, 'data2': data2})
+
+    return redirect('error')
 
 
 @login_required
 def duplicateEID(request):
+    # Check if the written employee id is is conflict with someone.
     if loginMode.objects.get(user=request.user).type == 'admin':
         data = request.body.decode('utf-8').split('=')[1]
         print(data)
         if teacherProfile.objects.filter(employeeId=data).count():
             return JsonResponse({'available': False})
-        return JsonResponse({'available': True})
 
-# Create new course and view all course of the institute.
+        return JsonResponse({'available': True})
 
 
 @login_required
 def manageCourse(request):
+    # Create new course and view all course of the institute.
     if loginMode.objects.get(user=request.user).type == 'admin':
+        try:
+            data = administrator.objects.get(user=request.user)
+        except:
+            data = []
         courses = Subject.objects.all()
         if request.method == 'POST':
             sid = request.POST.get('sid').upper()
@@ -157,29 +174,33 @@ def manageCourse(request):
             sem = request.POST.get('offeredSem')
             seats = request.POST.get('noseats')
             Subject.objects.create(subjectId=sid,  subjectName=sname, credits=credits,
-                                   subjectType=ctype, offeredSem=sem, totalSeats=seats).save()
+                                   subjectType=ctype, offeredSem=sem, totalSeats=seats)
 
-            return render(request, 'course.html', context={'messages': 'success', 'message': 'Course has been introduced', 'subjects': courses})
+            return render(request, 'course.html', context={'messages': 'success', 'message': 'Course has been introduced', 'subjects': courses, 'data': data})
 
-        return render(request, 'course.html', context={'subjects': courses})
+        return render(request, 'course.html', context={'subjects': courses, 'data': data})
     else:
         return redirect('error')
 
-# To edit the corse using course ID. (aadhura kaam!!)
-
 
 @login_required
+# To edit the corse using course ID. (aadhura kaam!!)
 def editCourse(request, cid):
     if loginMode.objects.get(user=request.user).type == 'admin':
         sub = Subject.objects.get(subjectId=cid)
-        return render(request, 'cedit.html', context={'detail': sub})
-    else:
-        return redirect('error')
+        try:
+            data = administrator.objects.get(user=request.user)
+        except:
+            data = []
+
+        return render(request, 'cedit.html', context={'detail': sub, 'data': data})
+
+    return redirect('error')
 
 
-# for the registration access, that is allow admin to start registrations.
 @login_required
 def registrationSetup(request):
+    # for the registration access, that is allow admin to start registrations.
     if loginMode.objects.get(user=request.user).type == 'admin':
         if request.method == 'POST':
             registrationStart = request.POST.get('startDateTime')
@@ -207,19 +228,27 @@ def registrationSetup(request):
                     student.currentSemRegister = True
                     student.save()
 
-        return render(request, 'registration.html')
-    else:
-        return redirect('error')
+            return redirect('/registrationSetup')
+        regs = len(currentRegistrations.objects.all()) == 0
+
+        try:
+            data = administrator.objects.get(user=request.user)
+        except:
+            data = []
+
+        return render(request, 'registration.html', context={'data': data, 'check': regs})
+
+    return redirect('error')
 
 
 @login_required
 def stopRegistrations(request):
     if loginMode.objects.get(user=request.user).type == 'admin':
         if request.method == 'POST':
-            regs = currentRegistrations.objects.get(liveRegistration=True)
-            for i in regs:
+            regs = currentRegistrations.objects.filter(liveRegistration=True)
+            for _ in regs:
                 regs.liveRegistration = False
-                regs.save()
+                regs.delete()
 
         return JsonResponse({'status': 'Success'})
 
@@ -234,5 +263,45 @@ def dashboard(request):
         return edit_profile(request)
 
 
-def adminFeedback(request):
-    return render(request, 'adminfeedback.html')
+@login_required
+def manage_feedbacks(request):
+    if loginMode.objects.get(user=request.user).type == 'admin':
+        try:
+            data = administrator.objects.get(user=request.user)
+        except:
+            data = []
+
+        feed_data = feedback.objects.all()
+        return render(request, 'adminFeedback.html', context={'feedbacks': feed_data, 'data': data})
+
+    return redirect('error')
+
+
+@login_required
+def admin_settings(request):
+    if loginMode.objects.get(user=request.user).type == 'admin':
+        if request.method == 'POST':
+            photo = request.FILES['photo']
+            fs = FileSystemStorage(location="media/profilePhoto/")
+            filename = fs.save(photo.name, photo)
+            try:
+                admin = administrator.objects.get(user=request.user)
+            except:
+                admin = administrator()
+            admin.name = request.POST.get('name')
+            admin.mobileNumber = request.POST.get('mobileNo')
+            admin.email = request.POST.get('email')
+            admin.employeeID = request.POST.get('employeeId')
+            admin.photo = filename
+            admin.user = request.user
+            admin.save()
+            return redirect('settings')
+
+        try:
+            admin = administrator.objects.get(user=request.user)
+        except:
+            admin = []
+
+        return render(request, 'adminSettings.html', context={'data': admin})
+
+    return redirect('error')

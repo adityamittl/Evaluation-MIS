@@ -9,6 +9,8 @@ urlpatterns = [
     path('course', manageCourse),
     path('course/edit/<str:cid>', editCourse),
     path('registrationSetup', registrationSetup),
+    path('feedbacks', manage_feedbacks),
+    path('adminSettings', admin_settings, name='settings'),
     path('stopRegistration', stopRegistrations),
     path('', dashboard, name='dashboard')
 ]

@@ -24,6 +24,7 @@ class administrator(models.Model):
     mobileNumber = models.CharField(max_length=30)
     email = models.CharField(max_length=50)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    photo = models.ImageField(null=True, blank=True)
 
 
 class teacherProfile(models.Model):

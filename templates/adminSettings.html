@@ -21,20 +21,22 @@
 
     <style>
       ul {
-        padding-left: 0;
+        padding-left: 0px;
       }
 
-      .registrationForm {
-        width: 50%;
+      form {
+        width: 60%;
+        padding-top: 50px;
+        padding-left: 50px;
       }
 
-      #manageStudents {
-        display: grid;
+      #editProfile {
         place-items: center;
+        width: 80vw;
+        overflow-y: scroll;
       }
     </style>
   </head>
-
   <body>
     <section>
       <!-- Left nevigatoin section to jump onto different sections -->
@@ -56,116 +58,107 @@
             Manage Instructors
           </li>
           <li onclick="window.location.href = '/course'">Manage Courses</li>
-          <li
-            onclick="window.location.href = '/registrationSetup'"
-            class="active"
-          >
+          <li onclick="window.location.href = '/registrationSetup'">
             Registration Window
           </li>
           <li onclick="window.location.href = '/feedbacks'">Feedbacks</li>
-          <li onclick="window.location.href = '/adminSettings'">Settings</li>
+          <li onclick="window.location.href = '/adminSettings'" class="active">
+            Settings
+          </li>
           <li onclick="window.location.href = '/signout'">Logout</li>
         </ul>
       </nav>
 
-      <div id="manageStudents">
-        {%if check%}
+      <div id="editProfile">
+        <nav class="navbar bg-light" style="height: 60px; width: 100%">
+          <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Your Profile</span>
+          </div>
+        </nav>
         <form
           action=""
           method="post"
-          class="registrationForm"
-          onsubmit="return confirm('Do you really want to submit the form?')"
+          enctype="multipart/form-data"
+          onsubmit="return confirm('Do you really want to submit the form?');"
         >
-          {%csrf_token%}
+          {% csrf_token %}
           <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1"
-              >Registration Start Date and Time</span
-            >
+            <span class="input-group-text" id="basic-addon1">Photo</span>
             <input
-              type="datetime-local"
+              type="file"
               class="form-control"
+              placeholder="Photo"
+              aria-label="Photo"
+              name="photo"
+              accept="image/*"
+              required
+              value="{{data.photo}}"
               aria-describedby="basic-addon1"
-              name="startDateTime"
-              id="startDateTime"
+            />
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Employee ID</span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Employee ID"
+              aria-label="Employee ID"
+              name="employeeId"
+              required
+              value="{{data.employeeID}}"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Name</span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Name"
+              aria-label="Name"
+              name="name"
+              required
+              value="{{data.name}}"
+              aria-describedby="basic-addon1"
             />
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1"
-              >Registration For session</span
-            >
-            <input
-              type="number"
-              name="session"
-              value="2016"
-              class="form-control"
-              aria-describedby="basic-addon1"
-              id="RegistrationYear"
-            />
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1"
-              >Semester Type</span
+              >Mobile Number</span
             >
             <input
               type="text"
-              name="semType"
-              value="Even"
               class="form-control"
+              placeholder="Mobile Number"
+              aria-label="Mobile Number"
+              name="mobileNo"
+              required
+              value="{{data.mobileNumber}}"
               aria-describedby="basic-addon1"
-              id="semType"
             />
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="basic-addon1">For Degree</span>
+            <span class="input-group-text" id="basic-addon1">Email</span>
             <input
               type="text"
-              name="deg"
-              value="UG"
               class="form-control"
+              placeholder="Email"
+              aria-label="Email"
+              name="email"
+              required
+              value="{{data.email}}"
               aria-describedby="basic-addon1"
-              id="deg"
             />
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+
+          <button type="submit" class="btn btn-primary">Update</button>
         </form>
-        {%endif%}
-        <button
-          type="button"
-          class="btn btn-danger"
-          onclick="stopRegistration()"
-        >
-          Stop Registrations
-        </button>
       </div>
 
       <!-- glass morphology elements -->
 
       <div class="circle1 circle"></div>
       <div class="circle2 circle"></div>
-      <script>
-        let x = new Date();
-        document.getElementById("RegistrationYear").value = x.getFullYear();
-        document
-          .getElementById("startDateTime")
-          .setAttribute("min", x.toJSON().split(".")[0].slice(0, 16));
-        function stopRegistration() {
-          if (confirm("Do you really want to stop registration Process")) {
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", "stopRegistration");
-            xhr.setRequestHeader(
-              "X-CSRFToken",
-              document.getElementsByName("csrfmiddlewaretoken")[0].value
-            );
-            xhr.send();
-            xhr.onreadystatechange = function () {
-              if (xhr.status != 200) {
-                alert("Encountered an error");
-              }
-              // alert('Registration Process has been stopped!! ')
-            };
-          }
-        }
-      </script>
     </section>
   </body>
 </html>

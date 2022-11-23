@@ -39,7 +39,10 @@ def studentHome(request):
 def courseRegistration(request):
     if loginMode.objects.get(user=request.user).type == 'student':
         student = studentProfile.objects.get(user=request.user)
-        time_t = currentRegistrations.objects.all()[0].registrationStart
+        try:
+            time_t = currentRegistrations.objects.all()[0].registrationStart
+        except:
+            return render(request, 'courseRegistraton.html', context={'start': False, 'Registration': True, 'data': student})
 
         if(student.currentSemRegister):
             return render(request, 'courseRegistraton.html', context={'start': False, 'Registration': True, 'data': student})
