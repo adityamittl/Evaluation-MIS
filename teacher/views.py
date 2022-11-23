@@ -21,10 +21,10 @@ def edit_profile(request):
         teacher.email = request.POST.get('secondaryEmail')
         teacher.photo = filename
         teacher.save()
-        return redirect('editProfile')
+        return redirect('/')
 
-    return render(request, 'teacherHome.html')
-    # return render(request, 'teacher.html', context={'detail': teacherProfile.objects.get(user=request.user)})
+    teacher = teacherProfile.objects.get(user=request.user)
+    return render(request, 'teacherHome.html', context={'data': teacher})
 
 
 @login_required

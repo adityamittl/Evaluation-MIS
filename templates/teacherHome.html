@@ -45,8 +45,14 @@
       <!-- Left nevigatoin section to jump onto different sections -->
       <nav>
         <div class="avatarWrap">
-          <div class="avatar"></div>
-          <h2>Lalu Yadav</h2>
+          <div class="avatar" style="display: grid; place-items: center">
+            <img
+              src="/media/profilePhoto/{{data.photo}}"
+              alt="Profile Photo"
+              height="100%"
+            />
+          </div>
+          <h2>{{data.firstName}} {{data.lastName}}</h2>
           <h3>(Teacher)</h3>
         </div>
         <ul class="navigation">
@@ -71,6 +77,7 @@
         <form
           action=""
           method="post"
+          enctype="multipart/form-data"
           onsubmit="return confirm('Do you really want to submit the form?');"
         >
           {% csrf_token %}
@@ -84,7 +91,7 @@
               name="photo"
               accept="image/*"
               required
-              value="{{detail.photo}}"
+              value="{{data.photo}}"
               aria-describedby="basic-addon1"
             />
           </div>
@@ -98,7 +105,7 @@
               disabled
               name="employeeId"
               required
-              value="{{detail.employeeId}}"
+              value="{{data.employeeId}}"
               aria-describedby="basic-addon1"
             />
           </div>
@@ -111,7 +118,7 @@
               aria-label="First Name"
               name="fname"
               required
-              value="{{detail.firstName}}"
+              value="{{data.firstName}}"
               aria-describedby="basic-addon1"
             />
           </div>
@@ -124,7 +131,7 @@
               aria-label="Last Name"
               name="lname"
               required
-              value="{{detail.lastName}}"
+              value="{{data.lastName}}"
               aria-describedby="basic-addon1"
             />
           </div>
@@ -139,7 +146,7 @@
               aria-label="Date of Birth"
               name="dob"
               required
-              value="{{detail.dob}}"
+              value="{{data.dob}}"
               aria-describedby="basic-addon1"
             />
           </div>
@@ -154,7 +161,7 @@
               aria-label="Mobile Number"
               name="mobileNo"
               required
-              value="{{detail.MobileNumber}}"
+              value="{{data.MobileNumber}}"
               aria-describedby="basic-addon1"
             />
           </div>
@@ -169,7 +176,7 @@
               aria-label="Secondary Email"
               name="secondaryEmail"
               required
-              value="{{detail.email}}"
+              value="{{data.email}}"
               aria-describedby="basic-addon1"
             />
           </div>
@@ -183,7 +190,7 @@
               disabled
               name="department"
               required
-              value="{{detail.department}}"
+              value="{{data.department}}"
               aria-describedby="basic-addon1"
             />
           </div>
