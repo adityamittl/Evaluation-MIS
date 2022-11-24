@@ -155,7 +155,7 @@
                                 />
                               </div>
                             </td>
-                            <td>
+                            <!-- <td>
                               <button
                                 type="button"
                                 class="btn btn-outline-warning"
@@ -169,7 +169,7 @@
                               >
                                 Delete
                               </button>
-                            </td>
+                            </td> -->
                           </tr>
                         </tbody>
                       </table>
@@ -190,7 +190,7 @@
                       >
                         Submit
                       </button>
-                      <table
+                      <!-- <table
                         class="table table-bordered border-success"
                         style="margin-top: 16px"
                       >
@@ -208,7 +208,7 @@
                             </td>
                           </tr>
                         </tbody>
-                      </table>
+                      </table> -->
                     </div>
                   </div>
                 </div>
@@ -268,7 +268,7 @@
         document.getElementById(`evaluationModule${sid}`).appendChild(rowWrap);
       };
 
-      const totalValue = (cid) => {
+      /*const totalValue = (cid) => {
         if (!count[cid]) {
           count[cid] = 1;
         }
@@ -284,7 +284,7 @@
         let totalWeightage = document.getElementById(`showWeightage${cid}`);
         let wei = parseInt(totalWeightage.innerHTML) + parseInt(weightage);
         totalWeightage.innerHTML = wei;
-      };
+      };*/
 
       const serverCall = (data) => {
         let xhr = new XMLHttpRequest();
