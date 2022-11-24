@@ -209,8 +209,10 @@ def registrationSetup(request):
             degType = request.POST.get('deg')
             currentRegistrations.objects.create(
                 registrationStart=registrationStart).save()
-            if sessionYear.objects.get(year=int(session)) != None:
+            if len(sessionYear.objects.filter(year=int(session))) ==0:
                 sYear = sessionYear.objects.create(year=int(session))
+            else:
+                sYear = sessionYear.objects.get(year = int(session))
 
             subjects = Subject.objects.all()
             for course in subjects:

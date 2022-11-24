@@ -116,8 +116,10 @@ def currentSheet(request):
 def studentFeedback(request):
     if loginMode.objects.get(user=request.user).type == 'student':
         student = studentProfile.objects.get(user=request.user)
+        print(request.POST)
         if request.method == 'POST':
-            star = list(request.POST)[3].split("_")[1]
+            star = request.POST.get('star')
+            print("----- ",star)
             teacher = teacherProfile.objects.get(
                 employeeId=request.POST.get('teacher_name'))
             feedback.objects.create(point=int(star), teacher=teacher, subject=sessionSubject.objects.get(
