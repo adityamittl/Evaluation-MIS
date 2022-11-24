@@ -173,12 +173,17 @@ def submitStudentMark(request):
 
             for sid in data.keys():
                 sheet = studentSessionsheet.objects.get(id=sid)
+                scs = sheet.scoreSheet.all()
                 sum_score = 0
-                for k in data[sid].keys():
-                    score = scoreCard.objects.create(
-                        evaluationMethod=evaluationScheme.objects.get(id=k), Score=data[sid][k])
-                    sheet.scoreSheet.add(score)
-                    sum_score += int(data[sid][k])
+                for x in scs:
+                    for k in data[sid].keys():
+                        # print(x.evaluationMethod)
+                        if x.evaluationMethod.id == int(k):
+                            print(k,x)
+                            temp = scoreCard.objects.get(evaluationMethod = evaluationScheme.objects.get(id = int(k)))
+                            temp.Score = data[sid][k]
+                            temp.save()
+                            sum_score += int(data[sid][k])
 
                 sheet.total = sum_score
                 sheet.save()

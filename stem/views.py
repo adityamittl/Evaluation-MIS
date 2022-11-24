@@ -65,8 +65,8 @@ def administratorHome(request):
                 loginMode.objects.create(user=newUser, type="student").save()
                 buildStudentProfile(
                     fetchedData[rollnumber], rollnumber, newUser)
-                sendmail(fetchedData[rollnumber]["First Name"] + " "+fetchedData[rollnumber]["Last name"],
-                         rollnumber+"@lnmiit.ac.in", rollnumber, fetchedData[rollnumber]["password"])
+                # sendmail(fetchedData[rollnumber]["First Name"] + " "+fetchedData[rollnumber]["Last name"],
+                        #  rollnumber+"@lnmiit.ac.in", rollnumber, fetchedData[rollnumber]["password"])
             except:
                 pass
 
@@ -126,7 +126,7 @@ def manageInstructor(request):
             branch = branches.objects.get(subcode=department)
             teacher = teacherProfile.objects.create(
                 user=newusr, employeeId=eid, firstName=fname, lastName=lname, department=branch).save()
-            loginMode.objects.create(user=newusr, type='teacher').save()
+            loginMode.objects.create(user=newusr, type='teacher')
 
             sbjs = Subject.objects.get(subjectId=sub)
             sbjs.teachers.add(teacher)
@@ -225,7 +225,6 @@ def registrationSetup(request):
                 print(sems)
                 if student.currentSem < str(sems):
                     student.currentSem = str(int(student.currentSem) + 1)
-                    student.currentSemRegister = True
                     student.save()
 
             return redirect('/registrationSetup')

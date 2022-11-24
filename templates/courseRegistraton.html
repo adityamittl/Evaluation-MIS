@@ -106,7 +106,7 @@
             setInterval(timer, 1000);
           }
           console.log("{{time}}");
-          var time = (Date.now() - Date.parse("{{time}}")) / 6000;
+          var time = (new Date("{{time}}") - new Date() ) / 6000;
           console.log(time.toFixed(0));
           display = document.getElementById("time");
           startTimer(time.toFixed(0), display);

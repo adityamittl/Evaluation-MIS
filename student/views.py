@@ -41,6 +41,7 @@ def courseRegistration(request):
         student = studentProfile.objects.get(user=request.user)
         try:
             time_t = currentRegistrations.objects.all()[0].registrationStart
+            print(time_t)
         except:
             return render(request, 'courseRegistraton.html', context={'start': False, 'Registration': True, 'data': student})
 
@@ -85,7 +86,7 @@ def courseRegistration(request):
                     sheet.registered = True
                     sheet.save()
                     student.scoreSheet.add(sheet)
-
+                student.currentSemRegister = True
                 student.save()
                 return redirect('courseRegister')
 
