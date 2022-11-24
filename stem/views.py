@@ -65,8 +65,8 @@ def administratorHome(request):
                 loginMode.objects.create(user=newUser, type="student").save()
                 buildStudentProfile(
                     fetchedData[rollnumber], rollnumber, newUser)
-                # sendmail(fetchedData[rollnumber]["First Name"] + " "+fetchedData[rollnumber]["Last name"],
-                        #  rollnumber+"@lnmiit.ac.in", rollnumber, fetchedData[rollnumber]["password"])
+                sendmail(fetchedData[rollnumber]["First Name"] + " "+fetchedData[rollnumber]["Last name"],
+                         rollnumber+"@lnmiit.ac.in", rollnumber, fetchedData[rollnumber]["password"])
             except:
                 pass
 
